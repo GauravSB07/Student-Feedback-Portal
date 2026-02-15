@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Feedback History{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/student_history.css' %}">
+
+<!-- ================= PAGE WRAPPER ================= -->
+<div class="relative min-h-screen py-20 bg-cover bg-center"
+     style="background-image: url('https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=2000&q=80');">
+
+  <!-- LIGHT OVERLAY (FIXED OPACITY) -->
+  <div class="absolute inset-0 bg-[#f6f1fb]/65 backdrop-blur-sm"></div>
+
+  <!-- CONTENT -->
+  <div class="relative z-10">
+
+    <!-- HEADER -->
+    <div class="text-center mb-14">
+      <h1 class="text-5xl font-extrabold text-[#7b3ff2] mb-3">
+        My Feedback History
+      </h1>
+      <p class="text-[#6a5c8a]">
+        Your previously submitted feedbacks
+      </p>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters">
+
+      <div class="custom-dropdown" id="semesterDropdown">
+        <div class="dropdown-trigger">
+          <span id="semesterText">All Semesters</span>
+          <span class="arrow">▼</span>
+        </div>
+
+        <div class="dropdown-menu">
+          <div class="dropdown-item" data-value="">
+            All Semesters
+          </div>
+
+          {% for sem in semesters %}
+            <div class="dropdown-item" data-value="{{ sem }}">
+              Semester {{ sem }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="custom-dropdown" id="monthDropdown">
+        <div class="dropdown-trigger">
+          <span id="monthText">All Months</span>
+          <span class="arrow">▼</span>
+        </div>
+
+        <div class="dropdown-menu">
+          <div class="dropdown-item" data-value="">
+            All Months
+          </div>
+
+          {% for m in months %}
+            <div class="dropdown-item" data-value="{{ m }}">
+              Month {{ m }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <input type="hidden" id="semesterFilter">
+      <input type="hidden" id="monthFilter">
+    </div>
+
+    <!-- HISTORY -->
+    <div class="max-w-5xl mx-auto space-y-16">
+
+      {% if feedbacks %}
+        {% regroup feedbacks by subject.subject_name as subject_list %}
+
+        {% for subject in subject_list %}
+          <h2 class="subject-title">{{ subject.grouper }}</h2>
+
+          {% for feedback in subject.list %}
+          <div class="history-card"
+               data-semester="{{ feedback.semester }}"
+               data-month="{{ feedback.month }}">
+
+            <div class="card-header">
+              <div>
+                <h3>{{ feedback.subject.subject_name }}</h3>
+                <p class="date">
+                  Submitted on {{ feedback.submitted_on|date:"d M Y" }}
+                </p>
+              </div>
+
+              <span class="badge">
+                Semester {{ feedback.semester }} · Month {{ feedback.month }}
+              </span>
+            </div>
+
+            <div class="ratings">
+              {% for response in feedback.feedbackresponse_set.all %}
+              <div class="rating-row">
+                <span>{{ response.question.question_text }}</span>
+
+                <div class="bar-wrap">
+                  <div class="bar-fill"
+                       style="width:{% widthratio response.rating 5 100 %}%">
+                  </div>
+                </div>
+
+                <strong>{{ response.rating }}/5</strong>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% if feedback.comment %}
+            <div class="comment-box">
+              “{{ feedback.comment }}”
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        {% endfor %}
+      {% else %}
+        <div class="empty">
+          <h3>No feedback submitted yet</h3>
+          <p>Your submitted feedback will appear here.</p>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
+<script>
+function setupDropdown(id, textId, inputId) {
+  const box = document.getElementById(id);
+  const trigger = box.querySelector(".dropdown-trigger");
+  const text = document.getElementById(textId);
+  const input = document.getElementById(inputId);
+
+  trigger.addEventListener("click", () => box.classList.toggle("open"));
+
+  box.querySelectorAll(".dropdown-item").forEach(item => {
+    item.addEventListener("click", () => {
+      text.innerText = item.innerText;
+      input.value = item.dataset.value;
+      box.classList.remove("open");
+      filterCards();
+    });
+  });
+
+  document.addEventListener("click", e => {
+    if (!box.contains(e.target)) box.classList.remove("open");
+  });
+}
+
+setupDropdown("semesterDropdown","semesterText","semesterFilter");
+setupDropdown("monthDropdown","monthText","monthFilter");
+
+function filterCards() {
+  const sem = document.getElementById("semesterFilter").value;
+  const mon = document.getElementById("monthFilter").value;
+
+  document.querySelectorAll(".history-card").forEach(card => {
+    const okSem = !sem || card.dataset.semester === sem;
+    const okMon = !mon || card.dataset.month === mon;
+    card.style.display = (okSem && okMon) ? "block" : "none";
+  });
+}
+</script>
+
+{% endblock %}

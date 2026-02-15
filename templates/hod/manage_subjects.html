@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Manage Subjects | EduFeed{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-10">
+
+  <!-- HEADER -->
+  <div class="mb-10 flex justify-between items-center">
+    <div>
+      <h1 class="text-3xl font-extrabold text-darktext">
+        📚 Manage Subjects
+      </h1>
+      <p class="text-darktext/60 mt-1">
+        {{ department.name }} Department
+      </p>
+    </div>
+
+    <!-- ADD SUBJECT -->
+    <a href="{% url 'hod_add_subject' %}"
+       class="px-6 py-3 rounded-full bg-primary text-white font-semibold
+              hover:bg-indigo-600 transition shadow">
+      ➕ Add Subject
+    </a>
+  </div>
+
+  <!-- SUBJECT LIST -->
+  <div class="bg-white/90 backdrop-blur border border-lilac/40 rounded-3xl shadow-lg overflow-hidden">
+
+    <table class="w-full text-sm">
+      <thead class="bg-lavender border-b border-lilac/40">
+        <tr>
+          <th class="px-6 py-4 text-left">Subject</th>
+          <th class="px-6 py-4 text-left">Teacher</th>
+        </tr>
+      </thead>
+
+      <tbody>
+      {% for subject in subjects %}
+        <tr class="border-b border-lilac/30 hover:bg-lavender/40 transition">
+
+          <!-- SUBJECT NAME -->
+          <td class="px-6 py-4 font-semibold text-darktext">
+            {{ subject.subject_name }}
+          </td>
+
+          <!-- TEACHER -->
+          <td class="px-6 py-4 text-darktext/80">
+            {% if subject.teacher %}
+              {{ subject.teacher.profile.user.get_full_name|default:subject.teacher.profile.user.username }}
+            {% else %}
+              <span class="text-darktext/40 italic">Not Assigned</span>
+            {% endif %}
+          </td>
+
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="3" class="px-6 py-10 text-center text-darktext/60">
+            No subjects added yet.
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+{% endblock %}

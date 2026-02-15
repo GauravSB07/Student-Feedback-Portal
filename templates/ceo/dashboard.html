@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}CEO Dashboard{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-gradient-to-br from-slate-50 to-violet-50">
+
+  <div class="max-w-7xl mx-auto px-6 py-16">
+
+    <!-- ================= HEADER ================= -->
+    <div class="mb-14">
+      <h1 class="text-5xl font-bold text-slate-900">CEO Dashboard</h1>
+      <p class="text-slate-600 mt-3 text-lg">
+        Administrative control panel
+      </p>
+    </div>
+
+    <!-- ================= ACTION GRID ================= -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mb-20">
+
+      <a href="{% url 'ceo_create_user' %}" class="group bg-white rounded-3xl p-8 border-2 border-slate-300 shadow-lg hover:border-violet-500 hover:-translate-x-2 transition">
+        <div class="text-3xl mb-5">👤</div>
+        <h3 class="text-xl font-semibold">Create User</h3>
+      </a>
+
+      <a href="{% url 'ceo_add_profile' %}" class="group bg-white rounded-3xl p-8 border-2 border-slate-300 shadow-lg hover:border-indigo-500 hover:-translate-x-2 transition">
+        <div class="text-3xl mb-5">🧾</div>
+        <h3 class="text-xl font-semibold">Create Profile</h3>
+      </a>
+
+      <a href="{% url 'ceo_users' %}" class="group bg-white rounded-3xl p-8 border-2 border-slate-300 shadow-lg hover:border-purple-500 hover:-translate-x-2 transition">
+        <div class="text-3xl mb-5">🧑‍💼</div>
+        <h3 class="text-xl font-semibold">Manage Users</h3>
+      </a>
+
+      <a href="{% url 'ceo_departments' %}" class="group bg-white rounded-3xl p-8 border-2 border-slate-300 shadow-lg hover:border-emerald-500 hover:-translate-x-2 transition">
+        <div class="text-3xl mb-5">🏢</div>
+        <h3 class="text-xl font-semibold">View Departments</h3>
+      </a>
+
+      <a href="{% url 'ceo_feedback_departments' %}" class="group bg-white rounded-3xl p-8 border-2 border-slate-300 shadow-lg hover:border-sky-500 hover:-translate-x-2 transition">
+        <div class="text-3xl mb-5">📊</div>
+        <h3 class="text-xl font-semibold">View Feedback</h3>
+      </a>
+
+    </div>
+
+    <!-- ================= FILTER DROPDOWNS ================= -->
+    <form id="filterForm" method="get" class="flex gap-6 mb-10">
+
+      <!-- SEMESTER -->
+      <div class="relative ceo-dropdown">
+        <button type="button"
+                onclick="ceoToggleDropdown('ceoSemesterDropdown')"
+                class="px-6 py-2 rounded-xl border-2 border-violet-400 bg-white font-semibold">
+          <span id="ceo_semester_label">Semester {{ semester }}</span> ▾
+        </button>
+
+        <input type="hidden" name="semester" id="ceo_semester_value" value="{{ semester }}">
+
+        <div id="ceoSemesterDropdown"
+             class="hidden absolute mt-2 w-40 bg-white rounded-xl shadow-lg border z-50">
+          {% for s in "1234"|make_list %}
+          <div class="px-4 py-2 hover:bg-violet-100 cursor-pointer"
+               onclick="ceoSelectAndSubmit('semester','{{ s }}','Semester {{ s }}')">
+            Semester {{ s }}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- MONTH -->
+      <div class="relative ceo-dropdown">
+        <button type="button"
+                onclick="ceoToggleDropdown('ceoMonthDropdown')"
+                class="px-6 py-2 rounded-xl border-2 border-violet-400 bg-white font-semibold">
+          <span id="ceo_month_label">Month {{ month }}</span> ▾
+        </button>
+
+        <input type="hidden" name="month" id="ceo_month_value" value="{{ month }}">
+
+        <div id="ceoMonthDropdown"
+             class="hidden absolute mt-2 w-36 bg-white rounded-xl shadow-lg border z-50">
+          {% for m in "1234"|make_list %}
+          <div class="px-4 py-2 hover:bg-violet-100 cursor-pointer"
+               onclick="ceoSelectAndSubmit('month','{{ m }}','Month {{ m }}')">
+            Month {{ m }}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </form>
+
+    <!-- ================= ORGANIZATION OVERVIEW ================= -->
+    <div class="rounded-3xl bg-white border border-violet-300 shadow-xl">
+
+      <div class="px-8 py-5 border-b border-violet-300 bg-violet-50">
+        <h2 class="text-2xl font-bold">Organization Overview</h2>
+        <p class="text-sm text-slate-600">
+          Department-wise feedback performance
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 px-8 py-5 bg-slate-50">
+        <div>
+          <p class="text-sm text-slate-500">Total Departments</p>
+          <h3 class="text-2xl font-extrabold text-violet-600">
+            {{ total_departments }}
+          </h3>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Total Feedbacks</p>
+          <h3 class="text-2xl font-extrabold text-indigo-600">
+            {{ total_feedbacks }}
+          </h3>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Overall Avg Rating</p>
+          <h3 class="text-2xl font-extrabold text-pink-600">
+            {{ overall_avg }}
+          </h3>
+        </div>
+      </div>
+
+      <div class="px-8 py-6 space-y-6">
+        {% for row in data %}
+        <div class="p-4 rounded-2xl
+            {% if weakest_department and row.department == weakest_department.department %}
+                bg-red-50 ring-2 ring-red-400
+            {% endif %}">
+
+          <div class="flex justify-between items-center text-sm mb-2">
+            <span class="font-semibold text-slate-800">
+              {{ row.department }}
+            </span>
+
+            <span class="text-slate-600">
+              {{ row.average }}/5
+              {% if weakest_department and row.department == weakest_department.department %}
+                <span class="ml-2 text-red-600 font-semibold">⚠ Weakest</span>
+              {% endif %}
+            </span>
+          </div>
+
+          <div class="w-full h-4 bg-slate-200 rounded-full overflow-hidden">
+            <div
+              class="h-full rounded-full transition-all duration-700
+                {% if row.average < 2.5 %}
+                  bg-red-500
+                {% elif row.average < 3.5 %}
+                  bg-yellow-400
+                {% else %}
+                  bg-green-500
+                {% endif %}"
+              style="width: {{ row.percentage }}%;">
+            </div>
+          </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= CEO DROPDOWN JS ================= -->
+<script>
+function ceoCloseAllDropdowns() {
+  document.getElementById("ceoSemesterDropdown")?.classList.add("hidden");
+  document.getElementById("ceoMonthDropdown")?.classList.add("hidden");
+}
+
+function ceoToggleDropdown(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  ceoCloseAllDropdowns();
+  el.classList.toggle("hidden");
+}
+
+function ceoSelectAndSubmit(type, value, label) {
+  document.getElementById("ceo_" + type + "_value").value = value;
+  document.getElementById("ceo_" + type + "_label").innerText = label;
+  document.getElementById("filterForm").submit();
+}
+
+document.addEventListener("click", function (e) {
+  if (!e.target.closest(".ceo-dropdown")) {
+    ceoCloseAllDropdowns();
+  }
+});
+</script>
+
+{% endblock %}

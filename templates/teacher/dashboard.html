@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+
+<section
+  class="min-h-screen py-20 relative overflow-hidden
+         bg-[radial-gradient(circle_at_top_left,#ede9fe,transparent_55%),
+             radial-gradient(circle_at_bottom_right,#e0e7ff,transparent_55%)]">
+
+  <!-- subtle texture -->
+  <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]
+              opacity-[0.035] pointer-events-none"></div>
+
+  <!-- glow blobs -->
+  <div class="absolute -top-40 -left-40 w-[600px] h-[600px]
+              bg-purple-400/30 rounded-full blur-3xl"></div>
+
+  <div class="absolute top-1/3 -right-40 w-[600px] h-[600px]
+              bg-indigo-400/30 rounded-full blur-3xl"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6">
+
+    <!-- HEADER -->
+    <div class="text-center mb-20">
+      <h1
+        class="text-4xl md:text-5xl font-extrabold
+               bg-gradient-to-r from-purple-800 to-indigo-700
+               bg-clip-text text-transparent">
+        Teacher Dashboard
+      </h1>
+
+      <p class="mt-4 text-purple-700/80 text-lg">
+        Semester {{ semester }} • Month {{ month }}
+      </p>
+    </div>
+
+    <!-- STATS -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-24">
+
+      <div
+        class="bg-white/80 backdrop-blur-xl
+               rounded-3xl p-7 text-center
+               border border-purple-300
+               shadow-[0_25px_55px_rgba(124,58,237,0.25)]
+               hover:-translate-y-1 transition">
+        <p class="text-sm text-purple-700">Subjects</p>
+        <p class="text-4xl font-extrabold text-purple-900 mt-2">
+          {{ total_subjects }}
+        </p>
+      </div>
+
+      <div
+        class="bg-white/80 backdrop-blur-xl
+               rounded-3xl p-7 text-center
+               border border-indigo-300
+               shadow-[0_25px_55px_rgba(99,102,241,0.25)]
+               hover:-translate-y-1 transition">
+        <p class="text-sm text-indigo-700">Feedbacks</p>
+        <p class="text-4xl font-extrabold text-indigo-900 mt-2">
+          {{ total_feedbacks }}
+        </p>
+      </div>
+
+      <div
+        class="bg-white/80 backdrop-blur-xl
+               rounded-3xl p-7 text-center
+               border border-violet-300
+               shadow-[0_25px_55px_rgba(139,92,246,0.28)]
+               hover:-translate-y-1 transition">
+        <p class="text-sm text-violet-700">Overall Rating</p>
+        <p class="text-4xl font-extrabold text-violet-900 mt-2">
+          {{ overall_avg|floatformat:1 }}/5
+        </p>
+      </div>
+
+    </div>
+
+    <!-- SUBJECT LIST -->
+    <h2 class="text-3xl font-bold text-purple-900 mb-14">
+      Your Subjects
+    </h2>
+
+    <div class="space-y-14">
+      {% for data in dashboard_data %}
+      <div
+        class="rounded-[32px] p-8
+               bg-white/75 backdrop-blur-xl
+               border border-purple-300
+               shadow-[0_35px_70px_rgba(124,58,237,0.28)]
+               hover:-translate-y-1
+               hover:shadow-[0_45px_90px_rgba(124,58,237,0.35)]
+               transition-all duration-300">
+
+        <!-- subject header -->
+        <div class="flex flex-wrap gap-4 justify-between items-center mb-10">
+          <h3 class="text-2xl font-extrabold text-purple-900">
+            {{ data.subject.subject_name }}
+          </h3>
+
+          <span
+            class="px-5 py-1.5 rounded-full text-sm font-semibold
+                   bg-purple-200 text-purple-900 shadow">
+            {{ data.feedback_count }} Feedback{{ data.feedback_count|pluralize }}
+          </span>
+        </div>
+
+        <!-- ratings -->
+        <div class="space-y-5">
+          {% for r in data.responses %}
+          <div class="grid md:grid-cols-[260px_1fr_80px] gap-5 items-center">
+
+            <span class="text-sm font-medium text-purple-900">
+              {{ r.question__question_text }}
+            </span>
+
+            <div class="h-2.5 bg-purple-200/70 rounded-full overflow-hidden">
+              <div
+                class="h-full rounded-full
+                {% if r.average_rating < 2.5 %}bg-rose-500
+                {% elif r.average_rating < 4 %}bg-amber-500
+                {% else %}bg-emerald-500{% endif %}"
+                style="width:{% widthratio r.average_rating 5 100 %}%;"></div>
+            </div>
+
+            <span class="text-sm font-bold text-right text-purple-900">
+              {{ r.average_rating|floatformat:1 }}/5
+            </span>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- action -->
+        <a
+          href="{% url 'subject_feedback_detail' data.subject.id %}"
+          class="inline-flex items-center gap-2 mt-10
+                 font-semibold text-indigo-700
+                 hover:text-indigo-900 transition">
+          View detailed feedback
+          <span class="text-lg">→</span>
+        </a>
+
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

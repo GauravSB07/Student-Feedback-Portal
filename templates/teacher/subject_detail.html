@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+{% block title %}{{ subject.subject_name }} Feedback{% endblock %}
+
+{% block content %}
+
+<section
+  class="min-h-screen py-24 relative overflow-hidden
+         bg-cover bg-center bg-no-repeat"
+  style="
+    background-image:
+      linear-gradient(
+        rgba(245,243,255,0.95),
+        rgba(237,233,254,0.95)
+      ),
+      url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1950&q=80');
+  "
+>
+
+  <!-- soft glow blobs -->
+  <div class="absolute -top-32 -left-32 w-[500px] h-[500px]
+              bg-purple-400/30 rounded-full blur-3xl
+              animate-pulse"></div>
+
+  <div class="absolute top-1/3 -right-40 w-[520px] h-[520px]
+              bg-rose-400/25 rounded-full blur-3xl
+              animate-pulse [animation-delay:1.5s]"></div>
+
+  <!-- subtle texture -->
+  <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/soft-wallpaper.png')]
+              opacity-[0.04] pointer-events-none"></div>
+
+  <div class="relative max-w-5xl mx-auto px-6">
+
+    <!-- TITLE -->
+    <div class="mb-20 animate-[fadeInDown_0.8s_ease-out]">
+      <h1 class="text-4xl md:text-5xl font-extrabold
+                 bg-gradient-to-r from-purple-800 via-fuchsia-700 to-rose-700
+                 bg-clip-text text-transparent">
+        {{ subject.subject_name }}
+        <span class="ml-4 px-4 py-1 rounded-full text-sm font-semibold
+                     bg-purple-200/60 text-purple-900 backdrop-blur">
+          Semester {{ semester }}
+        </span>
+      </h1>
+    </div>
+
+    <!-- MONTH SELECT -->
+    <div class="flex flex-wrap items-center gap-5 mb-20
+                animate-[fadeIn_0.9s_ease-out]">
+      <span class="font-semibold text-purple-900">
+        Select Month
+      </span>
+
+      <div class="flex gap-3 bg-purple-200/50 backdrop-blur-lg
+                  p-2 rounded-full shadow-lg">
+        {% for m in available_months %}
+        <a href="?month={{ m }}"
+           class="px-6 py-2 rounded-full font-semibold transition-all duration-300
+           {% if m == selected_month %}
+             bg-gradient-to-r from-purple-600 to-fuchsia-600
+             text-white shadow-lg scale-[1.05]
+           {% else %}
+             bg-white/70 text-purple-900 hover:bg-purple-300
+           {% endif %}">
+          Month {{ m }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- MONTHLY PERFORMANCE -->
+    <div class="rounded-[32px] p-8 mb-16
+                bg-white/55 backdrop-blur-xl
+                border border-purple-300/50
+                shadow-[0_35px_70px_rgba(124,58,237,0.25)]
+                animate-[fadeInUp_0.9s_ease-out]">
+
+      <h2 class="text-2xl font-bold text-purple-900 mb-8">
+        📊 Monthly Performance
+      </h2>
+
+      {% for row in monthly_trend %}
+      <div class="flex justify-between items-center py-5
+                  border-b border-purple-300/40">
+
+        <span class="font-medium text-purple-900">
+          Month {{ row.feedback__month }}
+        </span>
+
+        <div class="flex items-center gap-4">
+          <div class="w-40 h-2.5 rounded-full bg-purple-200/70 overflow-hidden">
+            <div class="h-full rounded-full transition-all duration-700
+              {% if row.avg_rating < 2.5 %}bg-rose-500
+              {% elif row.avg_rating < 4 %}bg-amber-400
+              {% else %}bg-emerald-500{% endif %}"
+              style="width:{% widthratio row.avg_rating 5 100 %}%;"></div>
+          </div>
+
+          <span class="font-bold
+            {% if row.avg_rating < 2.5 %}text-rose-700
+            {% elif row.avg_rating < 4 %}text-amber-700
+            {% else %}text-emerald-700{% endif %}">
+            {% if row.avg_rating < 2.5 %}⬇
+            {% elif row.avg_rating < 4 %}→
+            {% else %}⬆{% endif %}
+            {{ row.avg_rating|floatformat:1 }}/5
+          </span>
+        </div>
+
+      </div>
+      {% empty %}
+      <p class="text-purple-900">No monthly data yet.</p>
+      {% endfor %}
+    </div>
+
+    <!-- IMPROVEMENT -->
+    {% if improvement %}
+    <div class="rounded-2xl p-6 mb-16
+                bg-purple-100/60 backdrop-blur
+                border border-purple-300/60 shadow-lg
+                animate-[fadeInUp_1s_ease-out]">
+      {% if improvement.status == "improved" %}
+        <p class="text-emerald-700 font-bold text-lg">
+          ⬆ Improved by {{ improvement.percent }}%
+        </p>
+      {% elif improvement.status == "declined" %}
+        <p class="text-rose-700 font-bold text-lg">
+          ⬇ Declined by {{ improvement.percent }}%
+        </p>
+      {% else %}
+        <p class="text-amber-700 font-bold text-lg">
+          ➖ No significant change
+        </p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- AVERAGE RATINGS -->
+    <div class="rounded-[32px] p-8 mb-16
+                bg-white/55 backdrop-blur-xl
+                border border-fuchsia-300/50
+                shadow-[0_35px_70px_rgba(192,38,211,0.25)]
+                animate-[fadeInUp_1.1s_ease-out]">
+
+      <h3 class="text-xl font-bold text-fuchsia-900 mb-6">
+        Average Ratings
+      </h3>
+
+      {% for r in responses %}
+      <div class="flex justify-between py-4
+                  border-b border-fuchsia-300/40">
+        <span class="text-fuchsia-900">
+          {{ r.question__question_text }}
+        </span>
+        <span class="font-bold text-fuchsia-900">
+          {{ r.average_rating|floatformat:1 }}/5
+        </span>
+      </div>
+      {% empty %}
+      <p class="text-fuchsia-900">No ratings available.</p>
+      {% endfor %}
+    </div>
+
+    <!-- COMMENTS -->
+    <div class="rounded-[32px] p-8 mb-16
+                bg-white/55 backdrop-blur-xl
+                border border-purple-300/50
+                shadow-[0_35px_70px_rgba(124,58,237,0.25)]
+                animate-[fadeInUp_1.2s_ease-out]">
+
+      <h3 class="text-xl font-bold text-purple-900 mb-4">
+        🗨 Student Comments
+      </h3>
+
+      {% if comments %}
+        <p class="text-purple-900 mb-4">
+          {{ comments|length }} comment{{ comments|length|pluralize }} available.
+        </p>
+
+        <a href="{% url 'subject_comments' subject.id %}"
+          class="inline-block px-6 py-3 rounded-xl
+                  bg-gradient-to-r from-purple-600 to-fuchsia-600
+                  text-white font-semibold
+                  hover:scale-105 transition">
+          View All Comments
+        </a>
+
+      {% else %}
+        <p class="text-purple-900">
+          No comments available for this month.
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- NEEDS IMPROVEMENT -->
+    {% if weakest_topic %}
+    <div class="relative rounded-[36px] p-8
+                bg-gradient-to-br from-rose-100/90 to-fuchsia-100/90
+                border border-rose-300
+                shadow-[0_40px_90px_rgba(225,29,72,0.35)]
+                animate-[fadeInUp_1.3s_ease-out]">
+
+      <!-- glow behind -->
+      <div class="absolute inset-0 rounded-[36px]
+                  bg-rose-400/20 blur-2xl
+                  animate-pulse pointer-events-none
+                  -z-10"></div>
+
+      <h3 class="relative z-10 flex items-center gap-3
+                 text-2xl font-extrabold text-rose-900 mb-6">
+        ⚠ Needs Improvement
+      </h3>
+
+      <div class="relative z-10 flex flex-wrap items-center gap-4
+                  bg-white/80 backdrop-blur
+                  p-5 rounded-2xl mb-4
+                  border border-rose-200">
+
+        <span class="px-4 py-1 rounded-full text-sm font-bold
+                     bg-rose-500 text-white shadow">
+          Low Rated Area
+        </span>
+
+        <span class="flex-1 font-semibold text-rose-900">
+          {{ weakest_topic.question__question_text }}
+        </span>
+
+        <span class="font-extrabold text-rose-700">
+          {{ weakest_topic.average_rating|floatformat:1 }}/5
+        </span>
+      </div>
+
+      <p class="relative z-10 text-rose-800 font-medium">
+        This area consistently receives lower ratings and should be prioritised.
+      </p>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock %}

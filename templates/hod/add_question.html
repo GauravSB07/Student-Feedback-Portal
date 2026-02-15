@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Add Feedback Question | EduFeed{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 py-12">
+
+  <div class="mb-8">
+    <h1 class="text-3xl font-extrabold text-darktext">
+      ➕ Add Feedback Question
+    </h1>
+    <p class="text-darktext/60 mt-1">
+      Each question will be rated from 1 to 5 by students
+    </p>
+  </div>
+
+  <div class="bg-white rounded-3xl shadow-lg border border-lilac/40 p-8">
+
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <div>
+        <label class="block text-sm font-semibold mb-2">
+          Question
+        </label>
+        <textarea
+          name="question_text"
+          rows="3"
+          class="w-full px-4 py-3
+                rounded-xl
+                border border-purple-400
+                focus:outline-none focus:ring-2 focus:ring-purple-500
+                resize-none
+                text-left align-top
+                leading-normal"
+          placeholder="Enter your feedback question here..."
+        ></textarea>
+      </div>
+
+      <div class="flex justify-between pt-6">
+        <a href="{% url 'hod_manage_questions' %}"
+           class="text-darktext/60 hover:text-darktext">
+          ← Back
+        </a>
+
+        <button type="submit"
+                class="px-8 py-3 rounded-full bg-primary text-white font-semibold
+                       hover:bg-indigo-600 transition shadow">
+          Save Question
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

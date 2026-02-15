@@ -1,0 +1,185 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Student Feedback Portal</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body id="page"
+      class="min-h-screen grid md:grid-cols-2 transition-all duration-500">
+
+<!-- ======================================================
+ LEFT PANEL (IMAGE + BRANDING)
+====================================================== -->
+<section
+  class="hidden md:flex flex-col justify-center px-16
+         bg-cover bg-center relative"
+  style="
+    background-image:
+      linear-gradient(
+        rgba(235,232,245,0.92),
+        rgba(230,227,242,0.95)
+      ),
+      url('https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1950&q=80');
+  "
+>
+
+  <!-- softer depth overlay -->
+  <div class="absolute inset-0 bg-gradient-to-br
+              from-[#ebe8f5]/70 via-transparent to-[#dcd7ef]/60"></div>
+
+  <div class="relative">
+
+    <h1 class="text-5xl font-bold text-[#2a233f] mb-8 leading-tight"
+        style="font-family: 'Playfair Display', serif;"
+        data-aos="fade-right">
+      Student<br>
+      Feedback Portal
+    </h1>
+
+    <p class="text-[#4f4868] text-lg max-w-md leading-relaxed mb-10"
+       style="font-family: 'Inter', sans-serif;"
+       data-aos="fade-right" data-aos-delay="150">
+      A centralized academic feedback system designed to empower students,
+      enhance teaching quality, and provide leadership with actionable insights.
+    </p>
+
+    <div class="space-y-4 text-[#5a5472] text-sm"
+         style="font-family: 'Inter', sans-serif;"
+         data-aos="fade-right" data-aos-delay="300">
+
+      <div class="flex items-center gap-3">
+        <span class="text-[#6a5bb0] text-lg">✔</span>
+        Secure role-based access
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-[#6a5bb0] text-lg">✔</span>
+        Transparent academic analytics
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="text-[#6a5bb0] text-lg">✔</span>
+        Student-first design
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+ RIGHT PANEL (LOGIN)
+====================================================== -->
+<section
+  class="flex items-center justify-center px-6
+         bg-[#f2f3f8]">
+
+  <div class="w-full max-w-md
+              bg-[#fbfbfe]
+              border border-[#ded9f0]
+              rounded-3xl
+              shadow-[0_20px_50px_rgba(60,40,120,0.18)]
+              p-10"
+       data-aos="zoom-in">
+
+    <h2 class="text-3xl font-bold text-[#2a233f] mb-2 text-center">
+      Welcome Back
+    </h2>
+
+    <p class="text-[#6a6288] text-sm text-center mb-8">
+      Login to continue to your dashboard
+    </p>
+
+    <!-- LOGIN FORM -->
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- USERNAME -->
+      <div>
+        <label class="block text-sm text-[#5b5475] mb-1">
+          Username
+        </label>
+        <input type="text" name="username" required
+               class="w-full px-4 py-3 rounded-xl
+                      bg-[#f1f2f8] text-[#2a233f]
+                      border border-[#d4cfee]
+                      focus:outline-none
+                      focus:ring-2 focus:ring-[#6a5bb0]">
+      </div>
+
+      <!-- PASSWORD -->
+      <div>
+        <label class="block text-sm text-[#5b5475] mb-1">
+          Password
+        </label>
+        <input type="password" name="password" required
+               class="w-full px-4 py-3 rounded-xl
+                      bg-[#f1f2f8] text-[#2a233f]
+                      border border-[#d4cfee]
+                      focus:outline-none
+                      focus:ring-2 focus:ring-[#6a5bb0]">
+      </div>
+
+      <!-- ERROR -->
+      {% if form.errors %}
+        <p class="text-rose-500 text-sm">
+          Invalid username or password
+        </p>
+      {% endif %}
+
+      <!-- BUTTON -->
+      <button type="submit"
+              onclick="animateAndSubmit(event)"
+              class="w-full py-3 rounded-xl font-semibold
+                     bg-[#6a5bb0]
+                     text-white
+                     hover:bg-[#5a4c9c]
+                     hover:scale-[1.03]
+                     transition">
+        Login →
+      </button>
+    </form>
+
+    <div class="flex justify-center mt-8">
+        <img src="{% static 'images/edufeed-logo.png' %}"
+            alt="EduFeed"
+            class="h-10 w-auto opacity-90">
+    </div>
+
+
+  </div>
+</section>
+
+<!-- AOS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    once: true,
+    duration: 1200,
+    easing: 'ease-in-out'
+  });
+</script>
+
+<script>
+  function animateAndSubmit(e) {
+    e.preventDefault();
+    const page = document.getElementById('page');
+    page.classList.add('opacity-0', 'scale-95');
+    setTimeout(() => {
+      e.target.closest('form').submit();
+    }, 400);
+  }
+</script>
+
+</body>
+</html>

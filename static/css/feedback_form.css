@@ -1,0 +1,416 @@
+/* =====================================================
+   FEEDBACK PAGE BASE
+===================================================== */
+
+.feedback-page {
+  min-height: 100vh;
+  padding: 4rem 1rem;
+
+  /* REAL BACKGROUND IMAGE */
+  background-image:
+    linear-gradient(
+      135deg,
+      rgba(246, 245, 251, 0.92),
+      rgba(241, 238, 249, 0.92)
+    ),
+    url("/static/images/abstract_purple.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+/* =====================================================
+   MAIN CARD
+===================================================== */
+
+.feedback-card {
+  max-width: 1000px;
+  margin: auto;
+  background: #fbfbfd;
+  border-radius: 28px;
+  padding: 3rem;
+  border: 1px solid #dcd7ea;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.feedback-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.feedback-header h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.feedback-header p {
+  color: #4b5563;
+}
+
+.feedback-header span {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.feedback-layout {
+  display: flex;
+  gap: 3rem;
+}
+
+/* =====================================================
+   PROGRESS INDICATOR
+===================================================== */
+
+.progress-wrapper {
+  width: 50px;
+}
+
+.progress-sticky {
+  position: sticky;
+  top: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.progress-vertical {
+  width: 8px;
+  height: 360px;
+  background: #c4b5fd;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 100%;
+  height: 0%;
+  transition: height 0.6s ease, background 0.4s ease;
+}
+
+.progress-red {
+  background: linear-gradient(to top, #7c3aed, #c4b5fd);
+}
+
+.progress-yellow {
+  background: linear-gradient(to top, #6366f1, #a5b4fc);
+}
+
+.progress-green {
+  background: linear-gradient(to top, #16a34a, #4ade80);
+}
+
+.progress-count {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.feedback-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.8rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;   
+  gap: 0.6rem;
+}
+
+.form-group label {
+  color: #312e81;
+  font-weight: 700;
+}
+
+/* =====================================================
+   CUSTOM DROPDOWN
+===================================================== */
+
+.custom-dropdown {
+  position: relative;
+  user-select: none;
+}
+
+.dropdown-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border-radius: 18px;
+  border: 2px solid #7c3aed;
+  background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+  color: #312e81;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dropdown-trigger:hover {
+  border-color: #7c3aed;
+  box-shadow: 0 8px 20px rgba(124,58,237,0.2);
+}
+
+.dropdown-trigger svg {
+  transition: transform 0.3s ease;
+}
+
+.custom-dropdown.open .dropdown-trigger svg {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  width: 100%;
+  margin-top: 0.6rem;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #c7d2fe;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 50;
+}
+
+.custom-dropdown.open .dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-item {
+  padding: 0.9rem 1.2rem;
+  font-weight: 500;
+  color: #312e81;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: #ede9fe;
+}
+
+.dropdown-item.disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+  background: #f9fafb;
+}
+
+/* =====================================================
+   QUESTIONS
+===================================================== */
+
+.question-card {
+  background: linear-gradient(135deg, #ffffff, #f4f3ff);
+  border: 2px solid #a78bfa;
+  border-radius: 22px;
+  padding: 1.6rem;
+  position: relative;
+  transition: 0.35s;
+  box-shadow: 0 10px 25px rgba(124,58,237,0.15);
+}
+
+.question-card::before {
+  content: none;
+}
+
+.question-card.locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.question-title {
+  font-weight: 700;
+  color: #312e81;
+  margin-bottom: 1.2rem;
+}
+
+/* =====================================================
+   RATINGS
+===================================================== */
+
+.rating-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.8rem;
+}
+
+.rating-input {
+  display: none;
+}
+
+.rating-btn {
+  padding: 0.9rem 0;
+  border-radius: 14px;
+  border: 2px solid #d1d5db;
+  text-align: center;
+  cursor: pointer;
+  background: #f9fafb;
+  transition: 0.25s;
+}
+
+.rating-input:checked + .rating-btn {
+  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  color: white;
+  transform: scale(1.08);
+}
+
+/* =====================================================
+   COMMENT BOX
+===================================================== */
+
+.comment-box {
+  width: 100%;             
+  min-height: 140px;
+  border-radius: 18px;
+  border: 2px solid #818cf8;
+  padding: 1rem 1.1rem;
+  background: linear-gradient(135deg, #eef2ff, #fafafa);
+  color: #312e81;
+  resize: vertical;      
+}
+
+.comment-box:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.25);
+}
+
+.comment-box::placeholder {
+  color: #9aa3c7;
+}
+
+/* =====================================================
+   SUBMIT BUTTON
+===================================================== */
+
+.submit-btn {
+  padding: 1.2rem;
+  border-radius: 22px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  transition: 0.3s;
+  position: relative;
+}
+
+.btn-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* SUCCESS STATE */
+.submit-btn.success {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  pointer-events: none;
+}
+
+.submit-btn.success::after {
+  content: "✓ Submitted";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.submit-btn.success .btn-text {
+  visibility: hidden;
+}
+
+/* =====================================================
+   SUCCESS OVERLAY
+===================================================== */
+
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.success-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.success-box {
+  background: linear-gradient(135deg, #ffffff, #f5f3ff);
+  border-radius: 28px;
+  padding: 3rem 3.5rem;
+  text-align: center;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.35);
+  animation: successPop 0.5s ease;
+}
+
+.success-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  font-size: 2.4rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-box h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #14532d;
+  margin-bottom: 0.4rem;
+}
+
+.success-box p {
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes successPop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.hidden {
+  display: none;
+}

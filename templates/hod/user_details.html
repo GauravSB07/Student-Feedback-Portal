@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}User Details{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-6 py-12">
+
+    <h1 class="text-3xl font-extrabold text-darktext mb-2">
+        User Details
+    </h1>
+    <p class="text-darktext/60 mb-8">
+        Complete information for <b>{{ target_user.username }}</b>
+    </p>
+
+    <form method="post"
+          class="bg-white border border-lilac/50 rounded-2xl p-8 space-y-6">
+        {% csrf_token %}
+
+        <div>
+            <label class="block text-sm font-semibold mb-1">First Name</label>
+            <input type="text" name="first_name"
+                   value="{{ target_user.first_name }}"
+                   class="w-full rounded-lg border border-lilac/50 px-4 py-2">
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold mb-1">Last Name</label>
+            <input type="text" name="last_name"
+                   value="{{ target_user.last_name }}"
+                   class="w-full rounded-lg border border-lilac/50 px-4 py-2">
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold mb-1">Email</label>
+            <input type="email" name="email"
+                   value="{{ target_user.email }}"
+                   class="w-full rounded-lg border border-lilac/50 px-4 py-2">
+        </div>
+
+        {% if profile.role == "STUDENT" %}
+        <div>
+            <label class="block text-sm font-semibold mb-1">Roll No</label>
+            <input type="text" name="roll_no"
+                   value="{{ profile.roll_no }}"
+                   class="w-full rounded-lg border border-lilac/50 px-4 py-2">
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold mb-1">Division</label>
+            <input type="text" name="division"
+                   value="{{ profile.division }}"
+                   class="w-full rounded-lg border border-lilac/50 px-4 py-2">
+        </div>
+        {% endif %}
+
+        <div class="flex justify-end gap-4 pt-4">
+            <a href="{% url 'hod_manage_users' %}"
+               class="px-5 py-2 rounded-full border border-lilac/50">
+                Back
+            </a>
+
+            <button type="submit"
+                    class="px-6 py-2 rounded-full bg-lilac font-semibold">
+                Save Details
+            </button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

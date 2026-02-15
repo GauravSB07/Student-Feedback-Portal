@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}EduFeed{% endblock %}</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lilac: '#C8A2C8',
+                        gold: '#C2B280',
+                        lavender: '#F4EEF6',
+                        darktext: '#1F1F1F',
+                        primary: '#6D5EF6'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/edufeed-logo.png' %}">
+</head>
+
+<body class="bg-lavender text-darktext min-h-screen flex flex-col overflow-x-hidden">
+
+<!-- ================= NAVBAR ================= -->
+{% if user.is_authenticated and request.path != '/' and 'login' not in request.path %}
+<nav class="sticky top-0 z-50 bg-white
+            border-b-2 border-[#b48bc2]
+            shadow-sm">
+
+    <div class="w-full px-6 py-4 flex items-center justify-between">
+
+        <!-- EXTREME LEFT: LOGO ONLY (NO TEXT, NOT CLICKABLE) -->
+        <div class="flex items-center">
+            <img src="{% static 'images/edufeed-logo.png' %}"
+                 alt="EduFeed"
+                 class="h-12 w-auto select-none cursor-default">
+                 Smarter Feedback, Better Education
+        </div>
+
+        <!-- EXTREME RIGHT: ACTIONS -->
+        <div class="flex items-center gap-4">
+
+            {% if dashboard_url %}
+            <a href="{% url dashboard_url %}"
+               class="px-5 py-2 rounded-full
+                      bg-lilac/70 text-darktext font-semibold
+                      hover:bg-lilac transition">
+                Dashboard
+            </a>
+            {% endif %}
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit"
+                        class="px-5 py-2 rounded-full
+                               bg-rose-100 text-rose-700 font-semibold
+                               hover:bg-rose-200 transition">
+                    Logout
+                </button>
+            </form>
+
+        </div>
+    </div>
+</nav>
+{% endif %}
+
+<!-- =============== END NAVBAR =============== -->
+
+
+<!-- ================= MAIN CONTENT ================= -->
+<main class="flex-1">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-gradient-to-r from-[#2a1f45] via-[#3f2f66] to-[#1f1633]">
+  
+  <div class="w-full px-6 py-4 flex items-center justify-between text-sm">
+
+    <!-- EXTREME LEFT -->
+    <div class="text-[#d8d1ea]">
+      <span class="font-semibold text-white">EduFeed</span>
+      — Elevating education through meaningful feedback.
+    </div>
+
+    <!-- EXTREME RIGHT -->
+    <div class="text-[#d8d1ea]">
+      Built by — <span class="font-semibold text-white">Gaurav Bhirwandekar</span>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- ================= AOS JS ================= -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    once: true,
+    offset: 120,
+    duration: 900,
+    easing: 'ease-in-out'
+  });
+</script>
+
+<!-- ================= COUNTER SCRIPT ================= -->
+{% if request.path == "/" %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const counters = document.querySelectorAll(".counter");
+
+  counters.forEach(counter => {
+    counter.innerText = "0";
+    const target = parseInt(counter.dataset.target, 10);
+    const duration = 1400;
+    const start = performance.now();
+
+    function animate(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      counter.innerText = Math.floor(progress * target);
+      if (progress < 1) requestAnimationFrame(animate);
+      else counter.innerText = target;
+    }
+    requestAnimationFrame(animate);
+  });
+});
+</script>
+{% endif %}
+
+<!-- ================= CUSTOM DROPDOWN ================= -->
+</body>
+</html>

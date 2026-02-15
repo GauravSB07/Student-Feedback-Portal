@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-10">
+
+    <!-- HEADER -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-darktext">
+                Manage Users
+            </h1>
+            <p class="text-darktext/60 mt-1">
+                {{ department.name }} Department
+            </p>
+        </div>
+
+        <a href="{% url 'hod_create_user' %}"
+           class="px-6 py-2 rounded-full bg-lilac text-darktext font-semibold hover:opacity-90 transition">
+            + Create User
+        </a>
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="bg-white border border-lilac/50 rounded-2xl overflow-x-auto">
+        <table class="w-full text-sm table-fixed">
+
+            <thead class="bg-lavender border-b border-lilac/50">
+                <tr class="text-left">
+                    <th class="px-6 py-4 w-[180px]">Username</th>
+                    <th class="px-6 py-4 w-[260px]">Full Name</th>
+                    <th class="px-6 py-4 w-[160px]">Role</th>
+                    <th class="px-6 py-4 text-left">Roll No</th>
+                    <th class="px-6 py-4 w-[220px]">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for profile in profiles %}
+                <tr class="border-b border-lilac/30 hover:bg-lavender/40 transition">
+
+                    <!-- USERNAME -->
+                    <td class="px-6 py-4 font-semibold">
+                        {{ profile.user.username }}
+                    </td>
+
+                    <!-- FULL NAME -->
+                    <td class="px-6 py-4">
+                        {{ profile.user.get_full_name|default:"Not provided" }}
+                    </td>
+
+                    <!-- ROLE BADGE -->
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-lilac/40">
+                            {{ profile.role }}
+                        </span>
+                    </td>
+
+                    <td class="px-6 py-4 text-darktext/80">
+                        {% if profile.role == "STUDENT" and profile.studentprofile %}
+                            {{ profile.studentprofile.roll_no }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <!-- ACTIONS -->
+                    <td class="px-6 py-4">
+                    <a href="{% url 'hod_user_details' profile.user.id %}"
+                        class="px-4 py-2 rounded-full border border-primary
+                                text-primary font-medium
+                                hover:bg-primary hover:text-white transition">
+                        Details
+                    </a>
+                    </td>
+
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4"
+                        class="px-6 py-10 text-center text-darktext/60">
+                        No users found for your department.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+{% endblock %}

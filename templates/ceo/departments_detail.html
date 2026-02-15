@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}{{ department.name }} Department{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-14">
+
+    <!-- ================= TOP HEADER ================= -->
+    <div class="mb-14">
+
+        <h1 class="text-5xl font-extrabold text-darktext mt-5 tracking-tight">
+            {{ department.name|upper }}
+        </h1>
+
+        <p class="text-darktext/60 mt-3 text-lg">
+            Semester {{ semester }} · Month {{ month }}
+        </p>
+    </div>
+
+    <!-- ================= HOD CARD ================= -->
+    <div class="relative bg-white border border-lilac/50 rounded-3xl p-10 mb-16">
+
+        <!-- Accent bar -->
+        <div class="absolute inset-x-0 top-0 h-1.5 rounded-t-3xl
+                    bg-gradient-to-r from-lilac to-gold"></div>
+
+        <h2 class="text-2xl font-extrabold text-darktext mb-8">
+            Head of Department
+        </h2>
+
+        {% if hod %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div>
+                    <p class="text-sm uppercase tracking-wide text-darktext/50">
+                        Name
+                    </p>
+                    <p class="text-xl font-semibold text-darktext mt-1">
+                        {{ hod.user.get_full_name|default:hod.user.username }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-sm uppercase tracking-wide text-darktext/50">
+                        Username
+                    </p>
+                    <p class="text-xl font-semibold text-darktext mt-1">
+                        {{ hod.user.username }}
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <p class="italic text-darktext/50 mb-6">
+                No HOD assigned for this department.
+            </p>
+
+            <p class="text-sm text-darktext/60 mt-3">
+              Assign a HOD by updating a teacher’s role to <b>HOD</b> from
+              <b>Manage Users</b>.
+            </p>
+        {% endif %}
+    </div>
+
+    <!-- ================= TEACHERS OVERVIEW ================= -->
+    <div class="bg-white border border-lilac/50 rounded-3xl overflow-hidden">
+
+        <!-- Header -->
+        <div class="px-10 py-7 border-b border-lilac/40">
+            <h2 class="text-2xl font-extrabold text-darktext">
+                Teachers Overview
+            </h2>
+            <p class="text-darktext/60 mt-2">
+                Feedback summary for this department
+            </p>
+        </div>
+
+        <!-- Table -->
+        <table class="w-full text-sm">
+            <thead class="bg-lavender border-b border-lilac/40">
+                <tr class="text-left text-darktext">
+                    <th class="px-10 py-4 font-semibold">Teacher</th>
+                    <th class="px-10 py-4 font-semibold">Subjects</th>
+                    <th class="px-10 py-4 font-semibold">Feedbacks</th>
+                    <th class="px-10 py-4 font-semibold">Avg Rating</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for t in teacher_data %}
+                <tr class="border-b border-lilac/30
+                           hover:bg-lavender/50 transition">
+
+                    <!-- Teacher -->
+                    <td class="px-10 py-5 font-semibold text-darktext">
+                        {{ t.teacher.get_full_name|default:t.teacher.username }}
+                    </td>
+
+                    <!-- Subjects -->
+                    <td class="px-10 py-5 text-darktext/80">
+                        {{ t.subjects }}
+                    </td>
+
+                    <!-- Feedbacks -->
+                    <td class="px-10 py-5 text-darktext/80">
+                        {{ t.feedbacks }}
+                    </td>
+
+                    <!-- Rating -->
+                    <td class="px-10 py-5">
+                        {% if t.average >= 4 %}
+                            <span class="px-4 py-1.5 rounded-full text-xs font-bold
+                                         bg-emerald-100 text-emerald-700">
+                                {{ t.average }}
+                            </span>
+                        {% elif t.average >= 3 %}
+                            <span class="px-4 py-1.5 rounded-full text-xs font-bold
+                                         bg-yellow-100 text-yellow-700">
+                                {{ t.average }}
+                            </span>
+                        {% else %}
+                            <span class="px-4 py-1.5 rounded-full text-xs font-bold
+                                         bg-rose-100 text-rose-700">
+                                {{ t.average }}
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4"
+                        class="px-10 py-16 text-center text-darktext/60">
+                        No teachers found for this department.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

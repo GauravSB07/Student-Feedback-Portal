@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Give Feedback{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/feedback_form.css' %}">
+
+<!-- ================= PAGE WRAPPER WITH BG ================= -->
+<div class="feedback-page"
+     style="
+       background-image: url('{% static 'images/abstract_purple.png' %}');
+       background-size: cover;
+       background-position: center;
+       background-attachment: fixed;
+     ">
+
+  <div class="feedback-card" data-aos="fade-up">
+
+    <!-- HEADER -->
+    <div class="feedback-header">
+      <h1>Give Feedback</h1>
+      <p>Your honest feedback helps us improve teaching quality</p>
+      <span>Semester {{ current_semester }} · Month {{ current_month }}</span>
+    </div>
+
+    <div class="feedback-layout">
+
+      <!-- PROGRESS -->
+      <div class="progress-wrapper">
+        <div class="progress-sticky">
+          <div class="progress-vertical">
+            <div id="progressFill" class="progress-fill progress-red"></div>
+          </div>
+          <div class="progress-count">
+            <span id="answeredCount">0</span> / {{ questions|length }}
+          </div>
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <form method="post" class="feedback-form" id="feedbackForm">
+        {% csrf_token %}
+
+        <!-- SUBJECT -->
+        <div class="form-group">
+          <label>Select Subject</label>
+
+          <div class="custom-dropdown" id="subjectDropdown">
+            <div class="dropdown-trigger" id="dropdownTrigger">
+              <span id="selectedSubject">— Choose Subject —</span>
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"/>
+              </svg>
+            </div>
+
+            <div class="dropdown-menu" id="dropdownMenu">
+              {% for subject in subjects %}
+                {% if subject.id in submitted_subjects %}
+                  <div class="dropdown-item disabled">
+                    {{ subject.subject_name }} (Submitted)
+                  </div>
+                {% else %}
+                  <div class="dropdown-item" data-value="{{ subject.id }}">
+                    {{ subject.subject_name }}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+          <input type="hidden" name="subject" id="subjectInput" required>
+        </div>
+
+        <!-- QUESTIONS -->
+        {% for question in questions %}
+        <div class="question-card locked">
+          <div class="question-title">{{ question.question_text }}</div>
+
+          <div class="rating-grid">
+            {% for i in "12345" %}
+            <label>
+              <input type="radio"
+                     name="question_{{ question.id }}"
+                     value="{{ i }}"
+                     class="rating-input"
+                     disabled>
+              <div class="rating-btn">{{ i }}</div>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+
+        <!-- COMMENT -->
+        <div class="form-group locked">
+          <label>Additional Comments (optional)</label>
+          <textarea class="comment-box"
+                    name="comment"
+                    disabled
+                    placeholder="Type your view here..."></textarea>
+        </div>
+
+        <!-- SUBMIT -->
+        <button type="submit"
+                id="submitBtn"
+                class="submit-btn btn-disabled"
+                disabled>
+          <span class="btn-text">Submit Feedback</span>
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- SUCCESS OVERLAY -->
+  <div id="successOverlay" class="success-overlay hidden">
+    <div class="success-box">
+      <div class="success-icon">✓</div>
+      <h2>Feedback Submitted</h2>
+      <p>Thank you for your valuable feedback</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= FINAL JS (UNCHANGED) ================= -->
+<script>
+/* ================= ELEMENTS ================= */
+const dropdown = document.getElementById("subjectDropdown");
+const trigger = document.getElementById("dropdownTrigger");
+const menu = document.getElementById("dropdownMenu");
+const subjectInput = document.getElementById("subjectInput");
+const selectedText = document.getElementById("selectedSubject");
+
+const ratingInputs = document.querySelectorAll(".rating-input");
+const questionCards = document.querySelectorAll(".question-card");
+const commentBox = document.querySelector(".comment-box");
+const submitBtn = document.getElementById("submitBtn");
+
+const progressFill = document.getElementById("progressFill");
+const answeredText = document.getElementById("answeredCount");
+
+const successOverlay = document.getElementById("successOverlay");
+const form = document.getElementById("feedbackForm");
+
+const totalQuestions = {{ questions|length }};
+
+/* ================= LOCK FORM ================= */
+function lockForm() {
+  ratingInputs.forEach(r => r.disabled = true);
+  questionCards.forEach(c => c.classList.add("locked"));
+  commentBox.disabled = true;
+  submitBtn.disabled = true;
+  submitBtn.classList.add("btn-disabled");
+}
+
+/* ================= UNLOCK QUESTIONS ONLY ================= */
+function unlockQuestions() {
+  ratingInputs.forEach(r => r.disabled = false);
+  questionCards.forEach(c => c.classList.remove("locked"));
+  commentBox.disabled = false;
+
+  submitBtn.disabled = true;
+  submitBtn.classList.add("btn-disabled");
+}
+
+/* ================= DROPDOWN ================= */
+trigger.addEventListener("click", () => {
+  dropdown.classList.toggle("open");
+});
+
+menu.querySelectorAll(".dropdown-item").forEach(item => {
+  if (!item.classList.contains("disabled")) {
+    item.addEventListener("click", () => {
+      selectedText.innerText = item.innerText;
+      subjectInput.value = item.dataset.value;
+      dropdown.classList.remove("open");
+      unlockQuestions(); 
+    });
+  }
+});
+
+document.addEventListener("click", e => {
+  if (!dropdown.contains(e.target)) dropdown.classList.remove("open");
+});
+
+/* ================= PROGRESS + SUBMIT LOCK ================= */
+function updateProgressAndLock() {
+  // count unique answered questions
+  const answeredQuestions = new Set();
+
+  ratingInputs.forEach(r => {
+    if (r.checked) answeredQuestions.add(r.name);
+  });
+
+  const answeredCount = answeredQuestions.size;
+  answeredText.innerText = answeredCount;
+
+  const percent = Math.round((answeredCount / totalQuestions) * 100);
+  progressFill.style.height = percent + "%";
+
+  progressFill.className =
+    "progress-fill " +
+    (percent === 100 ? "progress-green" :
+     percent >= 40 ? "progress-yellow" :
+     "progress-red");
+
+  if (answeredCount === totalQuestions) {
+    submitBtn.disabled = false;
+    submitBtn.classList.remove("btn-disabled");
+  } else {
+    submitBtn.disabled = true;
+    submitBtn.classList.add("btn-disabled");
+  }
+}
+
+/* ================= LISTENERS ================= */
+ratingInputs.forEach(r =>
+  r.addEventListener("change", updateProgressAndLock)
+);
+
+/* ================= INIT ================= */
+lockForm();
+</script>
+
+{% endblock %}

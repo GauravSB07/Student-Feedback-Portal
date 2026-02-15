@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Feedback Overview | EduFeed{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-lavender/40">
+
+  <div class="max-w-7xl mx-auto px-6 py-14">
+
+    <!-- PAGE HEADER -->
+    <div class="mb-12">
+      <h1 class="text-4xl font-extrabold text-darktext">
+        Feedback Overview
+      </h1>
+      <p class="text-darktext/60 mt-2">
+        {{ department.name }} Department
+      </p>
+    </div>
+
+    <!-- TABLE CARD -->
+    <div class="rounded-3xl overflow-hidden
+                bg-white/95 backdrop-blur
+                border border-lilac/50
+                shadow-xl shadow-purple-200/40">
+
+      {% if subject_data %}
+
+      <table class="w-full text-sm">
+        <thead class="bg-gradient-to-r
+                      from-purple-50 via-indigo-50 to-pink-50
+                      border-b border-lilac/40">
+          <tr class="text-darktext font-semibold">
+            <th class="px-8 py-5 text-left">Subject</th>
+            <th class="px-8 py-5 text-left">Teacher</th>
+            <th class="px-8 py-5 text-center">Feedbacks</th>
+            <th class="px-8 py-5 text-center">Avg Rating</th>
+            <th class="px-8 py-5 text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for row in subject_data %}
+          <tr class="border-b border-lilac/30
+                     hover:bg-lavender/60
+                     transition">
+
+            <!-- SUBJECT -->
+            <td class="px-8 py-5 font-semibold text-darktext">
+              {{ row.subject.subject_name }}
+            </td>
+
+            <!-- TEACHER -->
+            <td class="px-8 py-5 text-darktext/70">
+              {{ row.teacher.username }}
+            </td>
+
+            <!-- FEEDBACK COUNT -->
+            <td class="px-8 py-5 text-center font-semibold text-darktext">
+              {{ row.feedback_count }}
+            </td>
+
+            <!-- AVG RATING -->
+            <td class="px-8 py-5 text-center">
+              {% if row.average >= 4 %}
+                <span class="px-4 py-1.5 rounded-full
+                             bg-green-100 text-green-700
+                             font-bold">
+                  {{ row.average }}
+                </span>
+              {% elif row.average >= 3 %}
+                <span class="px-4 py-1.5 rounded-full
+                             bg-yellow-100 text-yellow-700
+                             font-bold">
+                  {{ row.average }}
+                </span>
+              {% else %}
+                <span class="px-4 py-1.5 rounded-full
+                             bg-rose-100 text-rose-700
+                             font-bold">
+                  {{ row.average }}
+                </span>
+              {% endif %}
+            </td>
+
+            <!-- ACTION -->
+            <td class="px-8 py-5 text-center">
+              <a href="{% url 'subject_feedback_detail' row.subject.id %}"
+                 class="inline-flex items-center justify-center
+                        px-6 py-2 rounded-full
+                        bg-primary text-white font-semibold
+                        shadow hover:shadow-lg
+                        hover:scale-[1.04]
+                        transition">
+                View Details
+              </a>
+            </td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% else %}
+      <div class="py-20 text-center text-darktext/60">
+        No feedback data available.
+      </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Create User{% endblock %}
+
+{% block content %}
+
+<style>
+.local-dropdown {
+  position: relative;
+}
+
+.local-trigger {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #c7b7ff;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+}
+
+.local-menu {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  z-index: 50;
+  overflow: hidden;
+}
+
+.local-dropdown.open .local-menu {
+  display: block;
+}
+
+.local-item {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.local-item:hover {
+  background: #efeaff;
+}
+</style>
+
+<div class="max-w-xl mx-auto px-6 py-12">
+
+  <!-- ================= HEADER ================= -->
+  <h1 class="text-3xl font-extrabold text-darktext mb-2">
+    Create User
+  </h1>
+  <p class="text-darktext/60 mb-8">
+    Create login credentials (profile will be created next)
+  </p>
+
+  <!-- ================= FORM ================= -->
+  <form method="post"
+        class="bg-white border border-lilac/50 rounded-2xl p-8 space-y-6">
+    {% csrf_token %}
+
+    <!-- USERNAME -->
+    <div>
+      <label class="block text-sm font-semibold mb-1 text-darktext">
+        Username
+      </label>
+      <input type="text"
+             name="username"
+             required
+             class="w-full rounded-lg border border-lilac/50 px-4 py-2">
+    </div>
+
+    <!-- PASSWORD -->
+    <div>
+      <label class="block text-sm font-semibold mb-1 text-darktext">
+        Password
+      </label>
+      <input type="password"
+             name="password"
+             required
+             class="w-full rounded-lg border border-lilac/50 px-4 py-2">
+    </div>
+
+    <!-- ================= ACTIONS ================= -->
+    <div class="flex justify-end gap-4 pt-4">
+      <a href="{% url 'ceo_dashboard' %}"
+         class="px-5 py-2 rounded-full border border-lilac/50">
+        Cancel
+      </a>
+
+      <button type="submit"
+              class="px-6 py-2 rounded-full bg-lilac font-semibold">
+        Create User
+      </button>
+    </div>
+  </form>
+
+</div>
+
+{% endblock %}

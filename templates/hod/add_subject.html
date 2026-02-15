@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block title %}Add Subject | HOD{% endblock %}
+
+{% block content %}
+
+<!-- ================= LOCAL DROPDOWN CSS ================= -->
+<style>
+.local-dropdown {
+  position: relative;
+}
+
+.local-trigger {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #c7b7ff;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+}
+
+.local-menu {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  z-index: 50;
+  overflow: hidden;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.local-dropdown.open .local-menu {
+  display: block;
+}
+
+.local-item {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.local-item:hover {
+  background: #efeaff;
+}
+</style>
+
+<div class="max-w-xl mx-auto px-6 py-16">
+
+  <div class="bg-white/90 backdrop-blur border border-lilac/50
+              rounded-3xl shadow-xl p-10">
+
+    <h2 class="text-3xl font-extrabold text-center mb-6
+               bg-gradient-to-r from-purple-600 to-indigo-600
+               bg-clip-text text-transparent">
+      Add New Subject
+    </h2>
+
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- ================= SUBJECT NAME ================= -->
+      <div>
+        <label class="block text-sm font-semibold mb-1">Subject Name</label>
+        <input type="text"
+               name="subject_name"
+               required
+               class="w-full px-4 py-3 rounded-xl border border-lilac
+                      focus:ring-2 focus:ring-purple-400 outline-none">
+      </div>
+
+      <!-- ================= SEMESTER (CUSTOM) ================= -->
+      <div>
+        <label class="block text-sm font-semibold mb-1">Semester</label>
+
+        <div id="semesterDropdown" class="local-dropdown">
+          <div class="local-trigger">
+            <span id="semesterText">Select Semester</span>
+            ▼
+          </div>
+
+          <!-- Django reads this -->
+          <input type="hidden" name="semester" id="semesterInput" required>
+
+          <div class="local-menu">
+            <div class="local-item" data-value="1">Semester 1</div>
+            <div class="local-item" data-value="2">Semester 2</div>
+            <div class="local-item" data-value="3">Semester 3</div>
+            <div class="local-item" data-value="4">Semester 4</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TEACHER (CUSTOM) ================= -->
+      <div>
+        <label class="block text-sm font-semibold mb-1">Assign Teacher</label>
+
+        <div id="teacherDropdown" class="local-dropdown">
+          <div class="local-trigger">
+            <span id="teacherText">Select Teacher</span>
+            ▼
+          </div>
+
+          <input type="hidden" name="teacher" id="teacherInput" required>
+
+          <div class="local-menu">
+            {% for t in teachers %}
+              <div class="local-item" data-value="{{ t.id }}">
+                {{ t.profile.user.get_full_name|default:t.profile.user.username }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ACTIONS ================= -->
+      <div class="flex justify-between items-center pt-6">
+        <a href="{% url 'hod_manage_subjects' %}"
+           class="text-darktext/60 hover:underline">
+          ← Back
+        </a>
+
+        <button type="submit"
+                class="px-8 py-3 rounded-xl bg-purple-600 text-white
+                       font-semibold shadow hover:bg-purple-700 transition">
+          Save Subject
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- ================= LOCAL DROPDOWN JS ================= -->
+<script>
+(function () {
+
+  function setupDropdown(boxId, textId, inputId) {
+    const box = document.getElementById(boxId);
+    if (!box) return;
+
+    const trigger = box.querySelector(".local-trigger");
+    const text = document.getElementById(textId);
+    const input = document.getElementById(inputId);
+
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      box.classList.toggle("open");
+    });
+
+    box.querySelectorAll(".local-item").forEach(item => {
+      item.addEventListener("click", (e) => {
+        e.stopPropagation();
+        text.innerText = item.innerText;
+        input.value = item.dataset.value;
+        box.classList.remove("open");
+      });
+    });
+
+    document.addEventListener("click", () => {
+      box.classList.remove("open");
+    });
+  }
+
+  setupDropdown("semesterDropdown", "semesterText", "semesterInput");
+  setupDropdown("teacherDropdown", "teacherText", "teacherInput");
+
+})();
+</script>
+
+{% endblock %}

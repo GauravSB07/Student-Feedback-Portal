@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Teaching Progress{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/student_progress.css' %}">
+
+<div class="progress-bg">
+    <div class="progress-overlay"></div>
+
+    <div class="progress-wrapper fade-in">
+
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+            <h1 class="page-title">
+                📊 Teaching Progress
+            </h1>
+            <p class="page-subtitle">
+                Semester {{ semester }} • Month-wise improvement
+            </p>
+        </div>
+
+        {% for item in progress_data %}
+        <div class="subject-progress-card slide-up">
+
+            <!-- SUBJECT TITLE -->
+            <div class="subject-header">
+                <h2 class="subject-title">
+                    {{ item.subject.subject_name }}
+                </h2>
+                <span class="subject-chip">
+                    Monthly Ratings
+                </span>
+            </div>
+
+            {% if item.monthly %}
+                {% for row in item.monthly %}
+                <div class="progress-row enhanced">
+
+                    <!-- Month -->
+                    <span class="month-label">
+                        Month {{ row.feedback__month }}
+                    </span>
+
+                    <!-- Bar -->
+                    <div class="progress-bar-wrap">
+                        <div
+                            class="progress-bar-fill
+                            {% if row.avg < 2.5 %}bar-low
+                            {% elif row.avg < 4 %}bar-mid
+                            {% else %}bar-high{% endif %}"
+                            style="width: {% widthratio row.avg 5 100 %}%;"
+                        ></div>
+                    </div>
+
+                    <!-- Score -->
+                    <span class="score
+                        {% if row.avg < 2.5 %}low
+                        {% elif row.avg < 4 %}mid
+                        {% else %}high{% endif %}">
+                        {% if row.avg < 2.5 %}⬇
+                        {% elif row.avg < 4 %}→
+                        {% else %}⬆{% endif %}
+                        {{ row.avg|floatformat:1 }}/5
+                    </span>
+
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="muted">No feedback yet</p>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<!-- =================UX POLISH ================= -->
+<style>
+.subject-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+
+.subject-chip {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #ede9fe;
+    color: #6d28d9;
+    font-weight: 600;
+}
+
+.progress-row.enhanced {
+    transition: background 0.25s ease, transform 0.25s ease;
+    border-radius: 12px;
+    padding: 10px 6px;
+}
+
+.progress-row.enhanced:hover {
+    background: rgba(124, 58, 237, 0.06);
+    transform: translateX(4px);
+}
+
+.bar-low { background: linear-gradient(90deg, #f87171, #ef4444); }
+.bar-mid { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.bar-high { background: linear-gradient(90deg, #34d399, #10b981); }
+</style>
+
+{% endblock %}

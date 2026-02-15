@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Department Feedback | EduFeed{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-lavender/40">
+
+  <div class="max-w-7xl mx-auto px-6 py-14">
+
+    <h1 class="text-4xl font-extrabold text-darktext mb-10">
+      Department Feedback Overview
+    </h1>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      {% for dept in departments %}
+      <a href="{% url 'ceo_department_feedback' dept.id %}"
+         class="rounded-3xl p-8
+                bg-white/90 backdrop-blur
+                border border-lilac/50
+                shadow-lg hover:shadow-2xl
+                hover:-translate-y-1
+                transition">
+
+        <h3 class="text-xl font-bold text-darktext">
+          {{ dept.name }}
+        </h3>
+
+        <p class="text-darktext/60 mt-2">
+          View detailed feedback →
+        </p>
+
+      </a>
+      {% endfor %}
+
+    </div>
+
+  </div>
+</section>
+{% endblock %}

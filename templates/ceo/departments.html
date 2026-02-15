@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Departments{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12">
+
+    <!-- ================= HEADER ================= -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-12">
+        <div>
+            <h1 class="text-4xl font-extrabold text-darktext">
+                Departments
+            </h1>
+            <p class="text-darktext/60 mt-2">
+                Academic departments and performance overview
+            </p>
+        </div>
+
+        {% if departments %}
+        <a href="{% url 'ceo_add_department' %}"
+           class="inline-flex items-center gap-2
+                  px-7 py-2.5 rounded-full bg-lilac
+                  text-darktext font-semibold
+                  hover:opacity-90 transition">
+            <span class="text-lg leading-none">＋</span>
+            Add Department
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- ================= EMPTY STATE ================= -->
+    {% if not departments %}
+    <div class="bg-white border border-lilac/50 rounded-3xl
+                p-14 text-center max-w-2xl mx-auto">
+
+        <div class="text-4xl mb-4">🏫</div>
+
+        <h2 class="text-2xl font-bold text-darktext mb-3">
+            No Departments Found
+        </h2>
+
+        <p class="text-darktext/60 mb-8 leading-relaxed">
+            Get started by creating your first academic department.
+            Departments help organize faculty, students, and feedback.
+        </p>
+
+        <a href="{% url 'ceo_add_department' %}"
+           class="inline-flex items-center gap-2
+                  px-8 py-3 rounded-full bg-lilac
+                  text-darktext font-semibold
+                  hover:opacity-90 transition">
+            <span class="text-lg leading-none">＋</span>
+            Add Department
+        </a>
+    </div>
+
+    {% else %}
+    <!-- ================= DEPARTMENT GRID ================= -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        {% for dept in departments %}
+        <a href="{% url 'ceo_department_detail' dept.id %}"
+           class="group relative bg-white border border-lilac/50
+                  rounded-3xl p-8
+                  hover:shadow-2xl hover:-translate-y-1
+                  transition-all">
+
+            <!-- Accent strip -->
+            <div class="absolute inset-x-0 top-0 h-1
+                        rounded-t-3xl
+                        bg-gradient-to-r from-lilac to-gold"></div>
+
+            <h3 class="text-2xl font-bold text-darktext
+                       group-hover:text-lilac transition">
+                {{ dept.name }}
+            </h3>
+
+            <p class="text-darktext/60 mt-3 leading-relaxed">
+                View teachers, HOD information, and
+                department-wise feedback insights.
+            </p>
+
+            <div class="mt-6 inline-flex items-center gap-2
+                        text-sm font-semibold text-indigo-600">
+                View Details →
+            </div>
+        </a>
+        {% endfor %}
+
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

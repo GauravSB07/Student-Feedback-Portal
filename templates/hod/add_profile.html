@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}Create Profile | EduFeed{% endblock %}
+
+{% block content %}
+
+<!-- ================= LOCAL DROPDOWN CSS (HOD ONLY) ================= -->
+<style>
+.local-dropdown {
+  position: relative;
+}
+
+.local-trigger {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #c7b7ff;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+}
+
+.local-menu {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  z-index: 50;
+  overflow: hidden;
+}
+
+.local-dropdown.open .local-menu {
+  display: block;
+}
+
+.local-item {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.local-item:hover {
+  background: #efeaff;
+}
+</style>
+
+<div class="max-w-xl mx-auto px-6 py-12">
+
+  <!-- HEADER -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-extrabold text-darktext">
+      ➕ Create Profile
+    </h1>
+    <p class="text-darktext/60 mt-1">
+      Assign role and details to an existing user
+    </p>
+  </div>
+
+  <!-- FORM CARD -->
+  <form method="post"
+        class="space-y-6 bg-white/90 backdrop-blur
+               p-8 rounded-3xl shadow-lg border border-lilac/40">
+    {% csrf_token %}
+
+    <!-- ================= USER ================= -->
+    <div>
+      <label class="block text-sm font-medium mb-1 text-darktext">
+        User
+      </label>
+
+      <div id="userDropdown" class="local-dropdown">
+        <div class="local-trigger">
+          <span id="userText">Select user</span>
+          ▼
+        </div>
+
+        <input type="hidden" name="user" id="userInput" required>
+
+        <div class="local-menu">
+          {% for u in users %}
+            <div class="local-item" data-value="{{ u.id }}">
+              {{ u.username }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ROLE ================= -->
+    <div>
+      <label class="block text-sm font-medium mb-1 text-darktext">
+        Role
+      </label>
+
+      <div id="roleDropdown" class="local-dropdown">
+        <div class="local-trigger">
+          <span id="roleText">Select role</span>
+          ▼
+        </div>
+
+        <input type="hidden" name="role" id="roleInput" required>
+
+        <div class="local-menu">
+          <div class="local-item" data-value="STUDENT">Student</div>
+          <div class="local-item" data-value="TEACHER">Teacher</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ROLL NUMBER (STUDENT ONLY) ================= -->
+    <div id="rollNoField" class="hidden">
+      <label class="block text-sm font-medium mb-1 text-darktext">
+        Roll Number
+      </label>
+      <input type="text"
+             name="roll_no"
+             placeholder="e.g. CS23-045"
+             class="w-full border border-lilac/50 rounded-xl
+                    px-4 py-3 focus:ring-2 focus:ring-primary focus:outline-none">
+    </div>
+
+    <!-- ================= DEPARTMENT (LOCKED) ================= -->
+    <div>
+      <label class="block text-sm font-medium mb-1 text-darktext">
+        Department
+      </label>
+      <input type="text"
+             value="{{ department.name }}"
+             disabled
+             class="w-full border border-lilac/50 rounded-xl
+                    px-4 py-3 bg-gray-100 text-darktext/70">
+    </div>
+
+    <!-- ================= ACTIONS ================= -->
+    <div class="flex gap-4 pt-4">
+      <a href="{% url 'hod_dashboard' %}"
+         class="flex-1 text-center py-3 rounded-xl
+                border border-lilac text-darktext
+                hover:bg-lavender transition">
+        ← Back
+      </a>
+
+      <button type="submit"
+              class="flex-1 py-3 rounded-xl
+                     bg-primary text-white font-semibold
+                     hover:bg-indigo-600 transition shadow">
+        Create Profile
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<!-- ================= LOCAL DROPDOWN JS (HOD ONLY) ================= -->
+<script>
+function setupLocalDropdown(id, textId, inputId) {
+  const box = document.getElementById(id);
+  const trigger = box.querySelector(".local-trigger");
+  const text = document.getElementById(textId);
+  const input = document.getElementById(inputId);
+
+  trigger.addEventListener("click", () => {
+    box.classList.toggle("open");
+  });
+
+  box.querySelectorAll(".local-item").forEach(item => {
+    item.addEventListener("click", () => {
+      text.innerText = item.innerText;
+      input.value = item.dataset.value;
+      box.classList.remove("open");
+      toggleRollNo();
+    });
+  });
+
+  document.addEventListener("click", e => {
+    if (!box.contains(e.target)) box.classList.remove("open");
+  });
+}
+
+/* INIT DROPDOWNS */
+setupLocalDropdown("userDropdown", "userText", "userInput");
+setupLocalDropdown("roleDropdown", "roleText", "roleInput");
+
+/* STUDENT ROLL NO TOGGLE */
+const rollNoField = document.getElementById("rollNoField");
+function toggleRollNo() {
+  if (document.getElementById("roleInput").value === "STUDENT") {
+    rollNoField.classList.remove("hidden");
+  } else {
+    rollNoField.classList.add("hidden");
+  }
+}
+toggleRollNo();
+</script>
+
+{% endblock %}

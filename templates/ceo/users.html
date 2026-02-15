@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-10">
+
+    <!-- HEADER -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-darktext">
+                Manage Users
+            </h1>
+            <p class="text-darktext/60 mt-1">
+                Assign roles, departments, and manage user information
+            </p>
+        </div>
+
+        <a href="{% url 'ceo_add_profile' %}"
+           class="inline-flex items-center gap-2
+                  px-6 py-2 rounded-full bg-lilac
+                  text-darktext font-semibold hover:opacity-90 transition">
+            ＋ Create Profile
+        </a>
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="bg-white border border-lilac/50 rounded-2xl overflow-x-auto">
+        <table class="w-full text-sm ">
+            <thead class="bg-lavender border-b border-lilac">
+                <tr class="text-left">
+                    <th class="px-6 py-4 w-[160px] text-center">Username</th>
+                    <th class="px-6 py-4 w-[220px] text-center">Full Name</th>
+                    <th class="px-6 py-4 w-[140px] text-center">Role</th>
+                    <th class="px-6 py-4 w-[200px] text-center">Department</th>
+                    <th class="px-6 py-4 w-[250px] text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for profile in profiles %}
+            <tr class="border-b border-lilac hover:bg-lavender/40 transition">
+
+                <!-- USERNAME -->
+                <td class="px-6 py-4 text-center align-middle font-medium">
+                    {{ profile.user.username }}
+                </td>
+
+                <!-- FULL NAME -->
+                <td class="px-6 py-4 text-center align-middle">
+                    {{ profile.user.get_full_name|default:"Not provided" }}
+                </td>
+
+                <!-- ROLE BADGE -->
+                <td class="px-6 py-4 text-center align-middle">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-lilac">
+                        {{ profile.role }}
+                    </span>
+                </td>
+
+                <!-- DEPARTMENT -->
+                <td class="px-6 py-4 text-center align-middle">
+                    {{ profile.department.name|default:"—" }}
+                </td>
+
+                <!-- ACTIONS -->
+                <td class="px-6 py-4 text-center align-middle">
+                    <a href="{% url 'ceo_user_details' profile.user.id %}"
+                        class="inline-flex items-center justify-center
+                            px-6 py-2 rounded-full
+                            border border-[#c4b5fd]
+                            text-[#6d28d9] font-semibold
+                            hover:bg-[#ede9fe]
+                            transition">
+                        Details
+                    </a>
+                </td>
+                
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5"
+                    class="px-6 py-10 text-center text-darktext/60">
+                    No users found.
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- DROPDOWN SCRIPT -->
+<script>
+function toggleDropdown(id) {
+    document.querySelectorAll(".dropdown-panel").forEach(el => {
+        if (el.id !== id) el.classList.add("hidden");
+    });
+    document.getElementById(id).classList.toggle("hidden");
+}
+
+function selectDropdown(dropdownId, valueInputId, labelSpanId, value, label) {
+    document.getElementById(valueInputId).value = value;
+    document.getElementById(labelSpanId).innerText = label;
+    document.getElementById(dropdownId).classList.add("hidden");
+}
+
+document.addEventListener("click", function (e) {
+    if (!e.target.closest(".relative")) {
+        document.querySelectorAll(".dropdown-panel")
+            .forEach(el => el.classList.add("hidden"));
+    }
+});
+</script>
+{% endblock %}

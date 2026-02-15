@@ -1,0 +1,199 @@
+/* =====================================================
+   ABSTRACT BACKGROUND
+===================================================== */
+
+.progress-bg {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 80px;
+    background-image: url("https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1600&auto=format&fit=crop");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.progress-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(248,245,252,0.88),
+        rgba(242,236,248,0.95)
+    );
+    backdrop-filter: blur(2px);
+}
+
+.progress-wrapper {
+    position: relative;
+    z-index: 2;
+    padding: 60px 24px;
+}
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.page-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.page-title {
+    font-size: 44px;
+    font-weight: 800;
+    color: #2b2142;
+}
+
+.page-subtitle {
+    color: #6b5c86;
+    margin-top: 6px;
+}
+
+/* =====================================================
+   SUBJECT CARD
+===================================================== */
+
+.subject-progress-card {
+    max-width: 1000px;
+    margin: 0 auto 36px;
+    padding: 34px 36px;
+    border-radius: 22px;
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.96),
+        rgba(244,239,250,0.96)
+    );
+    border: 1px solid rgba(120,95,170,0.25);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.subject-progress-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.18);
+}
+
+/* =====================================================
+   SUBJECT TITLE
+===================================================== */
+
+.subject-title {
+    font-size: 26px;
+    margin-bottom: 26px;
+    color: #3b2b5a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* =====================================================
+   MONTH ROW
+===================================================== */
+
+.progress-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 80px;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.progress-row:last-child {
+    border-bottom: none;
+}
+
+.month-label {
+    font-weight: 600;
+    color: #514070;
+}
+
+/* =====================================================
+   PROGRESS BAR
+===================================================== */
+
+.progress-bar-wrap {
+    height: 8px;
+    background: rgba(0,0,0,0.08);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        #8b5cf6,
+        #c084fc
+    );
+    transition: width 0.5s ease;
+}
+
+/* =====================================================
+   SCORE COLORS
+===================================================== */
+
+.score {
+    font-weight: 700;
+    text-align: right;
+}
+
+.score.low {
+    color: #ef4444;
+}
+
+.score.mid {
+    color: #f59e0b;
+}
+
+.score.high {
+    color: #22c55e;
+}
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+.fade-in {
+    animation: fadeIn 0.8s ease both;
+}
+
+.slide-up {
+    animation: slideUp 0.6s ease both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+    .progress-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .score {
+        text-align: left;
+    }
+
+    .page-title {
+        font-size: 34px;
+    }
+}

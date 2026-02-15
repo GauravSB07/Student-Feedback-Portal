@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Add Department{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-6 py-16">
+
+    <!-- ================= HEADER ================= -->
+    <div class="mb-12 text-center">
+        <h1 class="text-4xl font-extrabold text-darktext tracking-tight">
+            Add Department
+        </h1>
+        <p class="text-darktext/60 mt-3 text-lg">
+            Create a new academic department
+        </p>
+    </div>
+
+    <!-- ================= FORM CARD ================= -->
+    <form method="post"
+          class="relative bg-white border border-lilac/50
+                 rounded-3xl p-12 space-y-8">
+
+        <!-- Accent bar -->
+        <div class="absolute inset-x-0 top-0 h-1.5 rounded-t-3xl
+                    bg-gradient-to-r from-lilac to-gold"></div>
+
+        {% csrf_token %}
+
+        <!-- DEPARTMENT NAME -->
+        <div>
+            <label class="block text-sm font-semibold text-darktext mb-2">
+                Department Name
+            </label>
+            <input type="text"
+                   name="name"
+                   required
+                   placeholder="e.g. Computer Science"
+                   class="w-full rounded-xl border border-lilac/50
+                          px-5 py-3 text-darktext
+                          focus:outline-none focus:ring-2 focus:ring-lilac
+                          transition">
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="flex justify-end gap-4 pt-6">
+
+            <a href="{% url 'ceo_departments' %}"
+               class="px-7 py-2.5 rounded-full
+                      border border-lilac/50
+                      text-darktext font-semibold
+                      hover:bg-lilac/20 transition">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="px-9 py-2.5 rounded-full
+                           bg-lilac text-darktext
+                           font-bold
+                           hover:opacity-90 transition">
+                Create Department
+            </button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

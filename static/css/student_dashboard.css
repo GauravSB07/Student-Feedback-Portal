@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+
+<section class="relative min-h-screen bg-cover bg-center"
+style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop');">
+
+  <!-- LIGHT OVERLAY -->
+  <div class="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6 py-20">
+
+    <!-- HEADER (NO LOGOUT HERE) -->
+    <div class="mb-14 animate-fade">
+      <h1 class="text-4xl font-extrabold text-[#2b2145] mb-2">
+        Student Dashboard
+      </h1>
+      <p class="text-[#6a5c8a]">
+        Semester {{ current_semester }} · Month {{ current_month }}
+      </p>
+    </div>
+
+    <!-- TOP MAIN GRID -->
+    <div class="grid md:grid-cols-3 gap-8 mb-16">
+
+      <!-- ACADEMIC PROGRESS -->
+      <div class="bg-[#ede8f6] rounded-3xl p-8 shadow-xl
+                  hover:-translate-y-2 transition animate-slide">
+
+        <div class="flex items-center gap-4 mb-4">
+          <img src="https://img.icons8.com/fluency/40/combo-chart.png"/>
+          <h3 class="text-xl font-semibold text-[#2f254f]">
+            Academic Progress
+          </h3>
+        </div>
+
+        {% if progress %}
+        <div class="text-5xl font-extrabold text-[#6f5bbd] mb-3">
+          {{ progress }}%
+        </div>
+
+        <p class="text-sm mb-4
+          {% if progress_status == 'improved' %}text-green-600
+          {% elif progress_status == 'declined' %}text-red-600
+          {% else %}text-yellow-600{% endif %}">
+          {{ progress_status|capfirst }}
+        </p>
+
+        <div class="w-full h-3 bg-[#d6cdee] rounded-full">
+          <div class="h-full rounded-full
+            {% if progress_status == 'improved' %}bg-green-500
+            {% elif progress_status == 'declined' %}bg-red-500
+            {% else %}bg-yellow-400{% endif %}"
+            style="width: {{ progress }}%">
+          </div>
+        </div>
+        {% else %}
+        <p class="text-[#6a5c8a]">
+          Submit feedback to unlock progress insights.
+        </p>
+        {% endif %}
+      </div>
+
+      <!-- PRIMARY ACTIONS (MERGED CARD) -->
+      <div class="bg-[#7b66c9] rounded-3xl p-8 shadow-xl
+                  text-white hover:-translate-y-2 transition
+                  animate-slide delay-150">
+
+        <div class="flex items-center gap-4 mb-6">
+          <img src="https://img.icons8.com/fluency/40/task.png"/>
+          <h3 class="text-xl font-semibold">
+            Feedback Actions
+          </h3>
+        </div>
+
+        <p class="text-sm text-white/90 mb-6">
+          Your feedback directly influences teaching quality and
+          institutional decisions.
+        </p>
+
+        <div class="space-y-3">
+          <a href="{% url 'feedback_form' %}"
+             class="block text-center py-3 rounded-xl
+                    bg-white text-[#5b4aa5] font-semibold
+                    hover:bg-[#f3f0ff] transition">
+            📝 Submit Feedback
+          </a>
+
+          <a href="{% url 'feedback_history' %}"
+             class="block text-center py-3 rounded-xl
+                    bg-white text-[#5b4aa5] font-semibold
+                    hover:bg-[#f3f0ff] transition">
+            📜 Feedback History
+          </a>
+
+          <a href="{% url 'student_progress' %}"
+             class="block text-center py-3 rounded-xl
+                    bg-white text-[#5b4aa5] font-semibold
+                    hover:bg-[#f3f0ff] transition">
+            📈 Progress Report
+          </a>
+        </div>
+      </div>
+
+      <!-- INSIGHT / INFO CARD -->
+      <div class="bg-[#f4f1fb] rounded-3xl p-8 shadow-xl
+                  hover:-translate-y-2 transition
+                  animate-slide delay-300">
+
+        <img src="https://img.icons8.com/fluency/40/idea.png" class="mb-4"/>
+
+        <h3 class="text-xl font-semibold text-[#2f254f] mb-2">
+          Why Your Feedback Matters
+        </h3>
+
+        <p class="text-[#6a5c8a] text-sm leading-relaxed">
+          Honest feedback helps teachers improve delivery,
+          departments refine curriculum, and institutions
+          maintain academic excellence.
+        </p>
+      </div>
+    </div>
+
+    <!-- LOWER INFO STRIP -->
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <div class="bg-white/90 rounded-2xl p-6 shadow-lg
+                  hover:-translate-y-1 transition animate-fade delay-300">
+        <img src="https://img.icons8.com/fluency/36/graduation-cap.png" class="mb-3"/>
+        <h4 class="font-semibold text-[#2f254f] mb-1">Student First</h4>
+        <p class="text-sm text-[#6a5c8a]">
+          Designed with simplicity and clarity.
+        </p>
+      </div>
+
+      <div class="bg-white/90 rounded-2xl p-6 shadow-lg
+                  hover:-translate-y-1 transition animate-fade delay-500">
+        <img src="https://img.icons8.com/fluency/36/combo-chart.png" class="mb-3"/>
+        <h4 class="font-semibold text-[#2f254f] mb-1">Transparent Insights</h4>
+        <p class="text-sm text-[#6a5c8a]">
+          See how feedback evolves month by month.
+        </p>
+      </div>
+
+      <div class="bg-white/90 rounded-2xl p-6 shadow-lg
+                  hover:-translate-y-1 transition animate-fade delay-700">
+        <img src="https://img.icons8.com/fluency/36/security-checked.png" class="mb-3"/>
+        <h4 class="font-semibold text-[#2f254f] mb-1">Secure & Private</h4>
+        <p class="text-sm text-[#6a5c8a]">
+          Role-based access ensures confidentiality.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

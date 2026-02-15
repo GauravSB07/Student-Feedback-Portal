@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+
+<section class="relative min-h-screen bg-cover bg-center"
+style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop');">
+
+  <!-- soft overlay -->
+  <div class="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6 py-20">
+
+    <!-- HEADER -->
+    <div class="mb-12">
+      <h1 class="text-4xl font-extrabold text-[#2b2145] mb-2">
+        Student Dashboard
+      </h1>
+      <p class="text-[#6a5c8a]">
+        Semester {{ current_semester }} · Month {{ current_month }}
+      </p>
+    </div>
+
+    <!-- ================= GIVE FEEDBACK ================= -->
+    <div class="mb-14">
+      <div class="bg-gradient-to-r from-[#7b66c9] to-[#9a86e8]
+                  rounded-xl p-8 text-white
+                  flex flex-col md:flex-row
+                  justify-between items-center gap-6
+                  shadow-xl">
+
+        <div>
+          <h2 class="text-2xl font-bold mb-2">
+            Share Your Feedback
+          </h2>
+          <p class="text-white/90">
+            Your opinion helps improve teaching quality and learning experience.
+          </p>
+        </div>
+
+        <a href="{% url 'feedback_form' %}"
+           class="px-8 py-3 rounded-lg bg-white text-[#5b4ab5]
+                  font-semibold hover:scale-105 transition">
+          📝 Submit Feedback
+        </a>
+      </div>
+    </div>
+
+    <!-- ================= ACTION CARDS  ================= -->
+    <div class="grid md:grid-cols-3 gap-8 mb-14">
+
+      <!-- FEEDBACK HISTORY ----->
+      <a href="{% url 'feedback_history' %}"
+        class="group bg-[#e9e3fb] rounded-xl p-6
+                border border-[#cfc3f6]
+                shadow-md hover:shadow-xl
+                hover:-translate-y-2 transition cursor-pointer">
+
+        <div class="flex justify-between items-start">
+          <img src="https://img.icons8.com/fluency/42/time-machine.png"/>
+          <span class="text-[#6b58b5] text-2xl font-bold
+                      group-hover:translate-x-1 transition">
+            →
+          </span>
+        </div>
+
+        <h3 class="mt-4 text-lg font-semibold text-[#2f254f]">
+          Feedback History
+        </h3>
+        <p class="text-sm text-[#5f5286] mt-1">
+          View feedback you’ve submitted in previous months.
+        </p>
+      </a>
+
+      <!-- PROGRESS OVERVIEW (ACTION) -->
+      <a href="{% url 'student_progress' %}"
+        class="group bg-[#e9e3fb] rounded-xl p-6
+                border border-[#cfc3f6]
+                shadow-md hover:shadow-xl
+                hover:-translate-y-2 transition cursor-pointer">
+
+        <div class="flex justify-between items-start">
+          <img src="https://img.icons8.com/fluency/42/combo-chart.png"/>
+          <span class="text-[#6b58b5] text-2xl font-bold
+                      group-hover:translate-x-1 transition">
+            →
+          </span>
+        </div>
+
+        <h3 class="mt-4 text-lg font-semibold text-[#2f254f]">
+          Progress Overview
+        </h3>
+        <p class="text-sm text-[#5f5286] mt-1">
+          See how feedback trends change over time.
+        </p>
+      </a>
+
+      <!-- WHY FEEDBACK (INFO) -->
+      <div class="bg-[#f9f7fe] rounded-xl p-6
+                  border border-[#ebe6f8]">
+
+        <img src="https://img.icons8.com/fluency/42/idea.png"/>
+
+        <h3 class="mt-4 text-lg font-semibold text-[#2f254f]">
+          Why Feedback Matters
+        </h3>
+        <p class="text-sm text-[#6a5c8a] mt-1">
+          Feedback is reviewed by teachers, HODs, and management.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ================= INFO CARDS ================= -->
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <div class="bg-white/90 rounded-lg p-5
+                  border border-[#ebe6f8] shadow-sm">
+        <img src="https://img.icons8.com/fluency/32/graduation-cap.png" class="mb-2"/>
+        <h4 class="font-semibold text-[#2f254f] mb-1">
+          Student-First Design
+        </h4>
+        <p class="text-sm text-[#6a5c8a]">
+          Simple, distraction-free experience.
+        </p>
+      </div>
+
+      <div class="bg-white/90 rounded-lg p-5
+                  border border-[#ebe6f8] shadow-sm">
+        <img src="https://img.icons8.com/fluency/32/shield.png" class="mb-2"/>
+        <h4 class="font-semibold text-[#2f254f] mb-1">
+          Secure & Private
+        </h4>
+        <p class="text-sm text-[#6a5c8a]">
+          Your identity is protected.
+        </p>
+      </div>
+
+      <div class="bg-white/90 rounded-lg p-5
+                  border border-[#ebe6f8] shadow-sm">
+        <img src="https://img.icons8.com/fluency/32/visible.png" class="mb-2"/>
+        <h4 class="font-semibold text-[#2f254f] mb-1">
+          Transparent System
+        </h4>
+        <p class="text-sm text-[#6a5c8a]">
+          Honest feedback leads to real change.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+{% if request.GET.submitted %}
+<div id="submitSuccess" class="dashboard-success">
+  <div class="success-icon">✓</div>
+  <div>
+    <h3>Feedback Submitted</h3>
+    <p>Thank you for your valuable feedback</p>
+  </div>
+</div>
+{% endif %}
+
+<style>
+.dashboard-success {
+  position: fixed;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  padding: 1rem 1.8rem;
+  border-radius: 16px;
+  display: flex;
+  gap: 1rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,.25);
+  z-index: 9999;
+}
+.success-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+</style>
+
+<script>
+const successMsg = document.getElementById("submitSuccess");
+if (successMsg) {
+  setTimeout(() => {
+    successMsg.style.opacity = "0";
+    successMsg.style.transform = "translate(-50%, -15px)";
+  }, 2500);
+}
+</script>
+
+{% endblock %}

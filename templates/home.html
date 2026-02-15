@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+{% block title %}Home | EduFeed{% endblock %}
+{% load static %}
+{% block content %}
+
+<!-- ======================================================
+ HERO SECTION
+====================================================== -->
+<section class="relative min-h-screen overflow-hidden">
+
+  <!-- BACKGROUND -->
+  <div class="absolute inset-0 bg-cover bg-center scale-110"
+       style="background-image:url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1600&auto=format&fit=crop');"
+       data-aos="zoom-out"
+       data-aos-duration="2000"></div>
+
+  <!-- OVERLAY -->
+  <div class="absolute inset-0 bg-gradient-to-br
+              from-[#1b152b]/95 via-[#2e2150]/90 to-[#1a1328]/95"></div>
+
+  <!-- CONTENT -->
+  <div class="relative max-w-7xl mx-auto px-6 py-40 grid md:grid-cols-2 gap-16 items-center">
+
+    <div data-aos="fade-up">
+
+      <!-- LOGO -->
+      <div class="flex items-center gap-4 mb-6">
+        <img src="{% static 'images/edufeed-logo.png' %}"
+             alt="EduFeed"
+             class="h-14 w-auto drop-shadow-lg">
+      </div>
+
+      <h1 class="text-5xl font-extrabold text-white leading-tight mb-6">
+        Elevating Education Through
+        <span class="text-[#C8A2C8]">Meaningful Feedback</span>
+      </h1>
+
+      <p class="text-lg text-[#e0d8ef] mb-10 max-w-xl">
+        A student-first academic feedback platform that transforms opinions
+        into actionable educational insights.
+      </p>
+
+      <a href="{% url 'login' %}"
+         class="inline-flex items-center gap-3 px-10 py-4 rounded-2xl
+                bg-[#C8A2C8] text-[#1a1328] text-lg font-semibold
+                shadow-xl hover:shadow-2xl hover:-translate-y-1 transition">
+        Login to Portal →
+      </a>
+
+      <!-- STATS -->
+      <div class="mt-16 grid grid-cols-3 gap-10 text-center">
+
+        <div>
+          <h3 class="text-4xl font-bold text-white counter" data-target="5000">0</h3>
+          <p class="text-[#d6cde6] text-sm mt-1">Students</p>
+        </div>
+
+        <div>
+          <h3 class="text-4xl font-bold text-white counter" data-target="200">0</h3>
+          <p class="text-[#d6cde6] text-sm mt-1">Faculty</p>
+        </div>
+
+        <div>
+          <h3 class="text-4xl font-bold text-white counter" data-target="50">0</h3>
+          <p class="text-[#d6cde6] text-sm mt-1">Departments</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+ WHY USE EDUFEED
+====================================================== -->
+<section class="relative py-32 overflow-hidden">
+
+  <!-- BACKGROUND IMAGE -->
+  <div class="absolute inset-0 bg-cover bg-center scale-110"
+       style="background-image:url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1600&auto=format&fit=crop');">
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="absolute inset-0 bg-gradient-to-br
+              from-[#2a1f45]/90 via-[#3a2b60]/85 to-[#1f1633]/90">
+  </div>
+
+  <!-- CONTENT -->
+  <div class="relative max-w-7xl mx-auto px-6 text-center">
+
+    <h2 class="text-4xl font-extrabold text-white mb-4"
+        data-aos="fade-up">
+      Why Use EduFeed?
+    </h2>
+
+    <p class="text-[#d8d1ea] max-w-2xl mx-auto mb-20"
+       data-aos="fade-up" data-aos-delay="100">
+      Designed for students, teachers, and academic leadership to ensure
+      continuous improvement in teaching quality.
+    </p>
+
+    <div class="grid md:grid-cols-3 gap-12">
+
+      <!-- CARD 1 -->
+      <div data-aos="fade-right"
+           class="bg-white/90 backdrop-blur-md
+                  border border-lilac/50
+                  rounded-3xl p-10 shadow-2xl
+                  hover:-translate-y-2 hover:shadow-purple-300/40
+                  transition-all duration-500">
+
+        <img src="https://img.icons8.com/fluency/64/combo-chart.png"
+             class="mb-6 mx-auto">
+
+        <h3 class="text-xl font-semibold text-darktext mb-3">
+          Feedback Analytics
+        </h3>
+
+        <p class="text-darktext/70 leading-relaxed">
+          Subject-wise and department-wise insights derived from real
+          student feedback.
+        </p>
+      </div>
+
+      <!-- CARD 2 -->
+      <div data-aos="fade-up" data-aos-delay="150"
+           class="bg-white/90 backdrop-blur-md
+                  border border-lilac/50
+                  rounded-3xl p-10 shadow-2xl
+                  hover:-translate-y-2 hover:shadow-purple-300/40
+                  transition-all duration-500">
+
+        <img src="https://img.icons8.com/fluency/64/classroom.png"
+             class="mb-6 mx-auto">
+
+        <h3 class="text-xl font-semibold text-darktext mb-3">
+          Student Friendly
+        </h3>
+
+        <p class="text-darktext/70 leading-relaxed">
+          Simple feedback forms, submission history, and academic
+          progress tracking.
+        </p>
+      </div>
+
+      <!-- CARD 3 -->
+      <div data-aos="fade-left" data-aos-delay="300"
+           class="bg-white/90 backdrop-blur-md
+                  border border-lilac/50
+                  rounded-3xl p-10 shadow-2xl
+                  hover:-translate-y-2 hover:shadow-purple-300/40
+                  transition-all duration-500">
+
+        <img src="https://img.icons8.com/fluency/64/administrator-male.png"
+             class="mb-6 mx-auto">
+
+        <h3 class="text-xl font-semibold text-darktext mb-3">
+          Academic Oversight
+        </h3>
+
+        <p class="text-darktext/70 leading-relaxed">
+          HODs and management monitor teaching effectiveness and
+          institutional performance.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ======================================================
+ ROLES (ANIMATED – PREMIUM & CLEAN)
+====================================================== -->
+<section class="relative py-28 overflow-hidden">
+
+  <!-- BACKGROUND IMAGE -->
+  <div class="absolute inset-0 bg-cover bg-center scale-110"
+       style="background-image:url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1600&auto=format&fit=crop');">
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="absolute inset-0 bg-gradient-to-br
+              from-[#2a1f45]/95 via-[#3f2f66]/90 to-[#1f1633]/95">
+  </div>
+
+  <!-- CONTENT -->
+  <div class="relative max-w-7xl mx-auto px-6 text-center">
+
+    <!-- HEADING -->
+    <h2 class="text-4xl font-bold text-white mb-20"
+        data-aos="fade-up">
+      Designed for Every Academic Role
+    </h2>
+
+    <!-- ROLE CARDS -->
+    <div class="grid md:grid-cols-4 gap-10">
+
+      <!-- STUDENT -->
+      <div data-aos="fade-up" data-aos-delay="0"
+           class="group bg-white/10 backdrop-blur-md
+                  rounded-2xl p-8 shadow-2xl
+                  border border-white/10
+                  transform transition-all duration-300
+                  hover:-translate-y-3 hover:bg-white/15">
+
+        <img src="https://img.icons8.com/fluency/64/student-male.png"
+             class="mx-auto mb-4 role-float
+                    transition-transform duration-300
+                    group-hover:-translate-y-2">
+
+        <h4 class="text-white font-semibold">
+          Student
+        </h4>
+
+        <p class="text-[#E6DDF3] text-sm mt-2">
+          Submit feedback & track progress.
+        </p>
+      </div>
+
+      <!-- TEACHER -->
+      <div data-aos="fade-up" data-aos-delay="100"
+           class="group bg-white/10 backdrop-blur-md
+                  rounded-2xl p-8 shadow-2xl
+                  border border-white/10
+                  transform transition-all duration-300
+                  hover:-translate-y-3 hover:bg-white/15">
+
+        <img src="https://img.icons8.com/fluency/64/teacher.png"
+             class="mx-auto mb-4 role-float
+                    transition-transform duration-300
+                    group-hover:-translate-y-2">
+
+        <h4 class="text-white font-semibold">
+          Teacher
+        </h4>
+
+        <p class="text-[#E6DDF3] text-sm mt-2">
+          Improve teaching via feedback.
+        </p>
+      </div>
+
+      <!-- HOD -->
+      <div data-aos="fade-up" data-aos-delay="200"
+           class="group bg-white/10 backdrop-blur-md
+                  rounded-2xl p-8 shadow-2xl
+                  border border-white/10
+                  transform transition-all duration-300
+                  hover:-translate-y-3 hover:bg-white/15">
+
+        <img src="https://img.icons8.com/fluency/64/conference.png"
+             class="mx-auto mb-4 role-float
+                    transition-transform duration-300
+                    group-hover:-translate-y-2">
+
+        <h4 class="text-white font-semibold">
+          HOD
+        </h4>
+
+        <p class="text-[#E6DDF3] text-sm mt-2">
+          Monitor department performance.
+        </p>
+      </div>
+
+      <!-- CEO -->
+      <div data-aos="fade-up" data-aos-delay="300"
+           class="group bg-white/10 backdrop-blur-md
+                  rounded-2xl p-8 shadow-2xl
+                  border border-white/10
+                  transform transition-all duration-300
+                  hover:-translate-y-3 hover:bg-white/15">
+
+        <img src="https://img.icons8.com/fluency/64/combo-chart.png"
+             class="mx-auto mb-4 role-float
+                    transition-transform duration-300
+                    group-hover:-translate-y-2">
+
+        <h4 class="text-white font-semibold">
+          CEO
+        </h4>
+
+        <p class="text-[#E6DDF3] text-sm mt-2">
+          Organization-wide insights.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
