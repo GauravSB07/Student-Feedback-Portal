@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-f=gnq8j7na@-a#x()*(qb=f5lvh49#bk^*ma7a%ejkknvdt=*n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -78,11 +80,11 @@ WSGI_APPLICATION = 'feedback_portal.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        default="sqlite:///db.sqlite3"
+    )
 }
+
 
 
 # Password validation
@@ -120,6 +122,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
@@ -129,7 +132,7 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "/redirect/"
 LOGOUT_REDIRECT_URL = "home"
 
-CURRENT_MONTH = 2
+CURRENT_MONTH = 1
 CURRENT_SEMESTER = 1
 
 AUTH_PROFILE_MODULE = 'core.Profile'
